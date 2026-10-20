@@ -1,0 +1,3 @@
+CustomerName,Phone,Email,Address,CustomerType,Balance,CreditLimit,PaymentDueDate,ReminderDays
+John Smith,555-0101,john.smith@email.com,123 Main St,Regular,0,1000,2026-09-01,7
+Jane Doe,555-0102,jane.doe@email.com,456 Oak Ave,Regular,150.00,1500,,14

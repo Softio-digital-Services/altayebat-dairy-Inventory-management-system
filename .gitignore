@@ -1,0 +1,47 @@
+# Build output
+bin/
+obj/
+publish/
+build_output.txt
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Legacy SQL Server LocalDB artifacts (app uses SQLite)
+Database/*.mdf
+Database/*.ldf
+Database/*.log
+Database/*.ps1
+Database/*.bat
+Database/*.sql
+
+# NuGet
+packages/
+*.nupkg
+
+# User-specific files
+*.rsuser
+
+# Publish and Installer output
+publish-output/
+InstallerOutput/
+dist/
+
+# Scratch & temporary logs
+scratch/
+scripts/
+crash.txt
+server_error.txt
+_backup_pre_otargi_web/
+
+# SQLite lock and journal files
+*.db-shm
+*.db-wal
+*.db-journal
+
+# Keep inventory database tracked
+!Data/inventory.db

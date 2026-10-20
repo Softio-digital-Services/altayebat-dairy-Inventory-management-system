@@ -1,0 +1,25 @@
+{
+  "name": "Al-Tayebat Inventory",
+  "short_name": "Al-Tayebat",
+  "description": "Al-Tayebat Inventory Management — web portal",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f1f5f9",
+  "theme_color": "#2563EB",
+  "icons": [
+    {
+      "src": "/Assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["business", "productivity"]
+}

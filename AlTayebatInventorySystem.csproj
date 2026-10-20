@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <NoWarn>$(NoWarn);CA1416;MSB3277</NoWarn>
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);MSB3277</MSBuildWarningsAsMessages>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+    <RootNamespace>InventorySystem</RootNamespace>
+    <AssemblyName>AlTayebatInventorySystem</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="scratch\**" />
+    <Compile Remove="_backup_pre_otargi_web\**" />
+    <Content Remove="_backup_pre_otargi_web\**" />
+    <None Remove="_backup_pre_otargi_web\**" />
+  </ItemGroup>
+
+  <!-- Enable ASP.NET Core Web API inside WinForms -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="8.0.0" />
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="QRCoder" Version="1.6.0" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+    <PackageReference Include="Svg" Version="3.4.7" />
+    <PackageReference Include="WinForms.DataVisualization" Version="1.10.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\**" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="wwwroot\**" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Plugins\**" CopyToOutputDirectory="PreserveNewest" Exclude="Plugins\**\*.cs" />
+    <Content Include="Templates\**" CopyToOutputDirectory="PreserveNewest" Condition="Exists('Templates')" />
+    <Content Include="Database\pos_cert.pfx" CopyToOutputDirectory="PreserveNewest" Condition="Exists('Database\pos_cert.pfx')" />
+    <Content Include="Data\inventory.db" CopyToOutputDirectory="PreserveNewest" Condition="Exists('Data\inventory.db')" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>

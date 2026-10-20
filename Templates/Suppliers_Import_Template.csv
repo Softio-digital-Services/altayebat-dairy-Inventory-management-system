@@ -1,0 +1,3 @@
+SupplierName,ContactPerson,Email,Phone,Address,Type,City,PostalCode,Website,Notes,Balance,PaymentDueDate,ReminderDays
+AutoParts Wholesale Inc,David Lee,sales@autopartswholesale.com,555-0201,100 Commerce Dr,Regular,Industrial Park,10001,www.autopartswholesale.com,Primary supplier,0,2026-10-01,7
+Quality Brake Systems,Maria Garcia,info@qualitybrakes.com,555-0202,200 Manufacturing Way,Regular,Factory Town,20002,www.qualitybrakes.com,Brake parts,500.00,,14
