@@ -11,9 +11,15 @@ namespace InventorySystem
     /// </summary>
     public static class DatabaseConfig
     {
-        private static readonly string UserDataRoot = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "AlTayebatInventory");
+        // ALTAYEBAT_DATA_DIR (optional) points the app at another data folder, e.g. to test a fresh install
+        // without touching the real database. Normal installs leave it unset.
+        private static readonly string UserDataRoot =
+            !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("ALTAYEBAT_DATA_DIR"))
+                ? Environment.GetEnvironmentVariable("ALTAYEBAT_DATA_DIR")
+                : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AlTayebatInventory");
+
+        /// <summary>Root folder for all user data (database, logs, backups, browser profile).</summary>
+        public static string DataRoot => UserDataRoot;
 
         public static string ConnectionString
         {

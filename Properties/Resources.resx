@@ -2439,4 +2439,100 @@ Accepted By: __________________________</value>
   <data name="Msg_SearchQuotations" xml:space="preserve">
     <value>Search quotations...</value>
   </data>
+  <data name="Nav_MilkProduction" xml:space="preserve">
+    <value>Milk Processing</value>
+  </data>
+  <data name="Milk_Title" xml:space="preserve">
+    <value>Milk Processing</value>
+  </data>
+  <data name="Milk_Search" xml:space="preserve">
+    <value>Search supplier, description...</value>
+  </data>
+  <data name="Milk_Intakes" xml:space="preserve">
+    <value>Raw milk received</value>
+  </data>
+  <data name="Milk_ShowFinished" xml:space="preserve">
+    <value>Show fully used</value>
+  </data>
+  <data name="Milk_Productions" xml:space="preserve">
+    <value>What was made</value>
+  </data>
+  <data name="Milk_Product" xml:space="preserve">
+    <value>Product made</value>
+  </data>
+  <data name="Milk_LitersUsed" xml:space="preserve">
+    <value>Milk used (L)</value>
+  </data>
+  <data name="Milk_Made" xml:space="preserve">
+    <value>Quantity made</value>
+  </data>
+  <data name="Milk_Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="Milk_Add" xml:space="preserve">
+    <value>Record</value>
+  </data>
+  <data name="Milk_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Milk_Supplier" xml:space="preserve">
+    <value>Supplier</value>
+  </data>
+  <data name="Milk_Type" xml:space="preserve">
+    <value>Milk type</value>
+  </data>
+  <data name="Milk_Liters" xml:space="preserve">
+    <value>Liters</value>
+  </data>
+  <data name="Milk_Used" xml:space="preserve">
+    <value>Used</value>
+  </data>
+  <data name="Milk_Remaining" xml:space="preserve">
+    <value>Remaining</value>
+  </data>
+  <data name="Milk_Intake" xml:space="preserve">
+    <value>Intake #</value>
+  </data>
+  <data name="Milk_Unit" xml:space="preserve">
+    <value>Unit</value>
+  </data>
+  <data name="Milk_User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="Milk_SelectIntake" xml:space="preserve">
+    <value>Select a milk intake above to record what was made from it.</value>
+  </data>
+  <data name="Milk_SelectedFmt" xml:space="preserve">
+    <value>Intake #{0} {1} - {2} L left</value>
+  </data>
+  <data name="Milk_RawStock" xml:space="preserve">
+    <value>Raw milk in stock</value>
+  </data>
+  <data name="Milk_ReqProduct" xml:space="preserve">
+    <value>Choose the product that was made.</value>
+  </data>
+  <data name="Milk_ConfirmDelete" xml:space="preserve">
+    <value>Delete this production? The quantity made will be removed from stock.</value>
+  </data>
+  <data name="Milk_ErrPositive" xml:space="preserve">
+    <value>Liters used and quantity made must be greater than zero.</value>
+  </data>
+  <data name="Milk_ErrTooMuch" xml:space="preserve">
+    <value>Only {0} L left in this milk intake.</value>
+  </data>
+  <data name="Milk_ReceivedBySupplier" xml:space="preserve">
+    <value>Milk received (by supplier)</value>
+  </data>
+  <data name="Exp_MilkLiters" xml:space="preserve">
+    <value>Milk (Liters)</value>
+  </data>
+  <data name="Exp_ReqMilkSupplier" xml:space="preserve">
+    <value>Choose the supplier the milk came from.</value>
+  </data>
+  <data name="Exp_MilkInUse" xml:space="preserve">
+    <value>This milk was already used in Milk Processing. Delete those productions first.</value>
+  </data>
+  <data name="Exp_SelectSupplier" xml:space="preserve">
+    <value>- Select supplier -</value>
+  </data>
 </root>

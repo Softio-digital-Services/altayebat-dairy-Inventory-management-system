@@ -43,6 +43,7 @@ namespace InventorySystem
                 return;
             }
 
+            InventorySystem.Helpers.StartupTrace.Mark("main start");
             Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -86,9 +87,11 @@ namespace InventorySystem
             {
                 // Initialize Database (Create if missing)
                 InventorySystem.Helpers.DatabaseInitializer.Initialize();
+                InventorySystem.Helpers.StartupTrace.Mark("database initialized");
 
                 // Ensure schema is up to date (add missing columns)
                 DatabaseHelper.EnsureSchema();
+                InventorySystem.Helpers.StartupTrace.Mark("schema ensured");
                 // Demo seed is opt-in via POST /api/dev/seed-demo — do not auto-fill new installs
 
                 // Initialize currency tables and load cached rates
@@ -120,6 +123,7 @@ namespace InventorySystem
                 }
 
                 // Desktop exe: embedded WebView2 window (no external Chrome)
+                InventorySystem.Helpers.StartupTrace.Mark("license checked, opening window");
                 Application.Run(new WebServerHostForm());
             }
             catch (Exception ex)
@@ -389,6 +393,7 @@ namespace InventorySystem
         {
             try
             {
+                InventorySystem.Helpers.StartupTrace.Mark("api: starting");
                 string appRoot = ResolveAppRoot();
 
                 string certPath = System.IO.Path.Combine(appRoot, "Database", "pos_cert.pfx");
@@ -422,6 +427,7 @@ namespace InventorySystem
                 builder.Services.AddSignalR();
 
                 var app = builder.Build();
+                InventorySystem.Helpers.StartupTrace.Mark("api: built");
 
                 // --- Discovery Logic ---
                 string localIp = "localhost";
@@ -460,6 +466,11 @@ namespace InventorySystem
                                 ctx.Context.Response.ContentType = ct + "; charset=utf-8";
                             // Avoid stale cached broken JS/CSS after updates
                             ctx.Context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+                        }
+                        else if (ext is ".woff2" or ".woff" or ".ttf" or ".png" or ".jpg" or ".ico")
+                        {
+                            // Fonts and images never change between launches: let the browser keep them
+                            ctx.Context.Response.Headers["Cache-Control"] = "public, max-age=2592000";
                         }
                     }
                 });
@@ -990,17 +1001,25 @@ namespace InventorySystem
                 });
 
                 // - Recent Sales (GET) -
-                app.MapGet("/api/recent-sales", () =>
+                app.MapGet("/api/recent-sales", (string from, string to) =>
                 {
                     try
                     {
-                        var dt = DatabaseHelper.ExecuteDataTable(
-                            @"SELECT o.order_id, o.order_date, o.total_amount, o.payment_status,
+                        // Optional date range (Sales page filter); without it, the latest 100 sales
+                        bool ranged = DateTime.TryParse(from, out var fromDate) & DateTime.TryParse(to, out var toDate);
+                        if (ranged && toDate < fromDate) (fromDate, toDate) = (toDate, fromDate);
+                        string sql = @"SELECT o.order_id, o.order_date, o.total_amount, o.payment_status,
                                      COALESCE(c.full_name, 'Cash Customer') as customer_name
                               FROM orders o
                               LEFT JOIN customers c ON o.customer_id = c.customer_id
-                              WHERE o.status = 'Completed'
-                              ORDER BY o.order_id DESC LIMIT 100");
+                              WHERE o.status = 'Completed'"
+                            + (ranged ? " AND date(o.order_date) BETWEEN date(@from) AND date(@to)" : "")
+                            + " ORDER BY o.order_id DESC LIMIT " + (ranged ? "5000" : "100");
+                        var dt = ranged
+                            ? DatabaseHelper.ExecuteDataTable(sql,
+                                new Microsoft.Data.Sqlite.SqliteParameter("@from", fromDate.ToString("yyyy-MM-dd")),
+                                new Microsoft.Data.Sqlite.SqliteParameter("@to", toDate.ToString("yyyy-MM-dd")))
+                            : DatabaseHelper.ExecuteDataTable(sql);
 
                         var sales = new System.Collections.Generic.List<object>();
                         foreach (System.Data.DataRow row in dt.Rows)
@@ -1299,6 +1318,7 @@ namespace InventorySystem
                             (fromDate, toDate) = svc.GetPresetRange(string.IsNullOrWhiteSpace(preset) ? "Monthly" : preset);
                         }
                         var s = svc.GetSummary(fromDate, toDate);
+                        var act = svc.GetActivity(fromDate, toDate);
                         return Microsoft.AspNetCore.Http.Results.Ok(new
                         {
                             fromDate = s.FromDate,
@@ -1311,7 +1331,14 @@ namespace InventorySystem
                             totalMilkExpenses = s.TotalMilkExpenses,
                             totalMilkLiters = s.TotalMilkLiters,
                             totalGeneralExpenses = s.TotalGeneralExpenses,
-                            totalUnpaidMilkExpenses = s.TotalUnpaidMilkExpenses
+                            totalUnpaidMilkExpenses = s.TotalUnpaidMilkExpenses,
+                            orderCount = act != null ? Convert.ToInt32(act["order_count"]) : 0,
+                            itemsSold = act != null ? Convert.ToDecimal(act["items_sold"]) : 0m,
+                            unpaidCount = act != null ? Convert.ToInt32(act["unpaid_count"]) : 0,
+                            unpaidTotal = act != null ? Convert.ToDecimal(act["unpaid_total"]) : 0m,
+                            returnsCount = act != null ? Convert.ToInt32(act["returns_count"]) : 0,
+                            returnsTotal = act != null ? Convert.ToDecimal(act["returns_total"]) : 0m,
+                            expenseCount = act != null ? Convert.ToInt32(act["expense_count"]) : 0
                         });
                     }
                     catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
@@ -1335,6 +1362,28 @@ namespace InventorySystem
                         var dt = svc.GetTopSellingProducts(fromDate, toDate, limit ?? 20);
                         return Microsoft.AspNetCore.Http.Results.Ok(DataTableToList(dt));
                     }
+                    catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
+                });
+
+                // - Report details for the chosen period (products, categories, expenses, trend) -
+                app.MapGet("/api/reports/products", (string preset, string from, string to) =>
+                {
+                    try { var svc = new ReportService(); var (f, t) = svc.ResolveRange(preset, from, to); return Microsoft.AspNetCore.Http.Results.Ok(DataTableToList(svc.GetProductsReport(f, t))); }
+                    catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
+                });
+                app.MapGet("/api/reports/categories", (string preset, string from, string to) =>
+                {
+                    try { var svc = new ReportService(); var (f, t) = svc.ResolveRange(preset, from, to); return Microsoft.AspNetCore.Http.Results.Ok(DataTableToList(svc.GetTopSellingCategories(f, t, 1000))); }
+                    catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
+                });
+                app.MapGet("/api/reports/expenses", (string preset, string from, string to) =>
+                {
+                    try { var svc = new ReportService(); var (f, t) = svc.ResolveRange(preset, from, to); return Microsoft.AspNetCore.Http.Results.Ok(DataTableToList(svc.GetExpensesList(f, t))); }
+                    catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
+                });
+                app.MapGet("/api/reports/trend", (string preset, string from, string to) =>
+                {
+                    try { var svc = new ReportService(); var (f, t) = svc.ResolveRange(preset, from, to); return Microsoft.AspNetCore.Http.Results.Ok(svc.GetTrend(f, t)); }
                     catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
                 });
 
@@ -1527,6 +1576,7 @@ namespace InventorySystem
                             new Microsoft.Data.Sqlite.SqliteParameter("@up", body.UnitPrice),
                             new Microsoft.Data.Sqlite.SqliteParameter("@mt", string.IsNullOrWhiteSpace(body.MilkType) ? DBNull.Value : (object)body.MilkType),
                             new Microsoft.Data.Sqlite.SqliteParameter("@sh", string.IsNullOrWhiteSpace(body.Shift) ? DBNull.Value : (object)body.Shift));
+                        if (body.Liters > 0) new MilkProductionService().SyncRawMilkStock();
                         return Microsoft.AspNetCore.Http.Results.Ok(new { success = true });
                     }
                     catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
@@ -1536,8 +1586,9 @@ namespace InventorySystem
                 {
                     try
                     {
-                        new ExpenseService().MarkAsPaid(id);
-                        return Microsoft.AspNetCore.Http.Results.Ok(new { success = true });
+                        return new ExpenseService().MarkAsPaid(id)
+                            ? Microsoft.AspNetCore.Http.Results.Ok(new { success = true })
+                            : Microsoft.AspNetCore.Http.Results.BadRequest(new { error = "Could not update the expense (database busy?). Please try again." });
                     }
                     catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
                 });
@@ -1546,8 +1597,9 @@ namespace InventorySystem
                 {
                     try
                     {
-                        new ExpenseService().MarkAsUnpaid(id);
-                        return Microsoft.AspNetCore.Http.Results.Ok(new { success = true });
+                        return new ExpenseService().MarkAsUnpaid(id)
+                            ? Microsoft.AspNetCore.Http.Results.Ok(new { success = true })
+                            : Microsoft.AspNetCore.Http.Results.BadRequest(new { error = "Could not update the expense (database busy?). Please try again." });
                     }
                     catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
                 });
@@ -1668,6 +1720,62 @@ namespace InventorySystem
                             milkSuppliers = DataTableToList(dtSuppliers),
                             categories = DataTableToList(dtCategories)
                         });
+                    }
+                    catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
+                });
+
+                // - Milk processing (what raw milk was turned into) -
+                app.MapGet("/api/milk/intakes", (string all) =>
+                {
+                    try
+                    {
+                        var svc = new MilkProductionService();
+                        svc.SyncRawMilkStock();
+                        return Microsoft.AspNetCore.Http.Results.Ok(DataTableToList(svc.GetMilkIntakes(all != "1")));
+                    }
+                    catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
+                });
+
+                app.MapGet("/api/milk/productions", (int? expenseId) =>
+                {
+                    try { return Microsoft.AspNetCore.Http.Results.Ok(DataTableToList(new MilkProductionService().GetProductions(expenseId))); }
+                    catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
+                });
+
+                app.MapGet("/api/milk/products", () =>
+                {
+                    try { return Microsoft.AspNetCore.Http.Results.Ok(DataTableToList(new MilkProductionService().GetProducibleProducts())); }
+                    catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
+                });
+
+                app.MapPost("/api/milk/productions", async (Microsoft.AspNetCore.Http.HttpRequest request) =>
+                {
+                    try
+                    {
+                        using var doc = await System.Text.Json.JsonDocument.ParseAsync(request.Body);
+                        var root = doc.RootElement;
+                        int expenseId = root.GetProperty("expenseId").GetInt32();
+                        int partId = root.GetProperty("partId").GetInt32();
+                        decimal liters = root.GetProperty("litersUsed").GetDecimal();
+                        decimal made = root.GetProperty("quantityMade").GetDecimal();
+                        string notes = root.TryGetProperty("notes", out var n) && n.ValueKind == System.Text.Json.JsonValueKind.String ? n.GetString() : null;
+                        string user = root.TryGetProperty("recordedBy", out var u) && u.ValueKind == System.Text.Json.JsonValueKind.String ? u.GetString() : null;
+
+                        string error = new MilkProductionService().AddProduction(expenseId, partId, liters, made, notes, user);
+                        return error == null
+                            ? Microsoft.AspNetCore.Http.Results.Ok(new { success = true })
+                            : Microsoft.AspNetCore.Http.Results.BadRequest(new { error });
+                    }
+                    catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
+                });
+
+                app.MapPost("/api/milk/productions/{id:int}/delete", (int id) =>
+                {
+                    try
+                    {
+                        return new MilkProductionService().DeleteProduction(id)
+                            ? Microsoft.AspNetCore.Http.Results.Ok(new { success = true })
+                            : Microsoft.AspNetCore.Http.Results.BadRequest(new { error = "Production not found" });
                     }
                     catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
                 });
@@ -2256,8 +2364,12 @@ namespace InventorySystem
                 {
                     try
                     {
+                        var milk = new MilkProductionService();
+                        if (milk.HasProductions(id))
+                            return Microsoft.AspNetCore.Http.Results.BadRequest(new { error = "This milk was already used in Milk Processing. Delete those productions first." });
                         DatabaseHelper.ExecuteNonQuery("DELETE FROM expenses WHERE expense_id = @id",
                             new Microsoft.Data.Sqlite.SqliteParameter("@id", id));
+                        milk.SyncRawMilkStock();
                         return Microsoft.AspNetCore.Http.Results.Ok(new { success = true });
                     }
                     catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
@@ -3050,6 +3162,47 @@ namespace InventorySystem
                 ScaleApiBootstrap.MapEndpoints(app);
 
                 // Feature flags (scale / quick sale — Softio Super Admin only for writes)
+                // - Sidebar order (everyone reads it; only Softio Super Admin may change it) -
+                app.MapGet("/api/settings/nav-order", () =>
+                {
+                    try
+                    {
+                        string json = DatabaseHelper.ExecuteScalar<string>("SELECT value FROM app_settings WHERE key = 'nav_order'");
+                        var list = string.IsNullOrWhiteSpace(json)
+                            ? new System.Collections.Generic.List<string>()
+                            : System.Text.Json.JsonSerializer.Deserialize<System.Collections.Generic.List<string>>(json);
+                        return Microsoft.AspNetCore.Http.Results.Ok(list);
+                    }
+                    catch { return Microsoft.AspNetCore.Http.Results.Ok(new string[0]); }
+                });
+
+                app.MapPut("/api/settings/nav-order", async (Microsoft.AspNetCore.Http.HttpRequest request) =>
+                {
+                    try
+                    {
+                        using var doc = await System.Text.Json.JsonDocument.ParseAsync(request.Body);
+                        var root = doc.RootElement;
+                        string user = root.TryGetProperty("username", out var u) && u.ValueKind == System.Text.Json.JsonValueKind.String ? u.GetString() : "";
+                        if (!string.Equals(user?.Trim(), "Softio.Admin", StringComparison.OrdinalIgnoreCase))
+                            return Microsoft.AspNetCore.Http.Results.Json(
+                                new { error = "Only Softio Super Admin can change this setting." }, statusCode: 403);
+
+                        var order = new System.Collections.Generic.List<string>();
+                        if (root.TryGetProperty("order", out var o) && o.ValueKind == System.Text.Json.JsonValueKind.Array)
+                            foreach (var item in o.EnumerateArray())
+                                if (item.ValueKind == System.Text.Json.JsonValueKind.String && !string.IsNullOrWhiteSpace(item.GetString()))
+                                    order.Add(item.GetString().Trim());
+
+                        if (order.Count == 0)
+                            DatabaseHelper.ExecuteNonQuery("DELETE FROM app_settings WHERE key = 'nav_order'");
+                        else
+                            DatabaseHelper.ExecuteNonQuery("INSERT OR REPLACE INTO app_settings (key, value) VALUES ('nav_order', @v)",
+                                new Microsoft.Data.Sqlite.SqliteParameter("@v", System.Text.Json.JsonSerializer.Serialize(order)));
+                        return Microsoft.AspNetCore.Http.Results.Ok(new { success = true, order });
+                    }
+                    catch (Exception ex) { return Microsoft.AspNetCore.Http.Results.Problem(ex.Message); }
+                });
+
                 app.MapGet("/api/features", () =>
                     Microsoft.AspNetCore.Http.Results.Ok(new
                     {
@@ -3242,6 +3395,7 @@ namespace InventorySystem
                 });
 
                 // Ports are configured via Kestrel above
+                InventorySystem.Helpers.StartupTrace.Mark("api: running");
                 app.Run();
             }
             catch (Exception ex)

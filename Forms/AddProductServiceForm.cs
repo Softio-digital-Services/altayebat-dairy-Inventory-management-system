@@ -46,6 +46,7 @@ namespace InventorySystem.Forms
         private ModernTextBox[] txtProfits = new ModernTextBox[4];
 
         private int? _editPartId = null;
+        private bool _isRawMilk = false;
         private string _currentImagePath = null;
         
         private GroupBox gbType;
@@ -652,6 +653,26 @@ namespace InventorySystem.Forms
             _currentImagePath = part.PartImage;
             UpdateImagePreview();
             CalculateMargins(null, null);
+
+            if (new MilkProductionService().IsRawMilkPart(part.Id)) SetupRawMilkView();
+        }
+
+        // Raw milk comes from many suppliers, so replace the single supplier picker with a "milk received" list.
+        private void SetupRawMilkView()
+        {
+            _isRawMilk = true;
+            numStock.Enabled = false; // stock is calculated from milk intakes and productions
+            cmbSupplier.Visible = false;
+
+            var btnMilkHistory = new ModernButton
+            {
+                Text = LocalizationManager.GetString("Milk_ReceivedBySupplier", "Milk received (by supplier)"),
+                Location = new Point(cmbSupplier.Left, cmbSupplier.Top + 12),
+                Size = new Size(cmbSupplier.Width, 38)
+            };
+            ThemeConfig.ApplySecondaryButton(btnMilkHistory);
+            btnMilkHistory.Click += (s, e) => { using (var f = new MilkIntakesDialog()) f.ShowDialog(this); };
+            gbSupp.Controls.Add(btnMilkHistory);
         }
 
         private void CalculateMargins(object sender, EventArgs e)
@@ -736,6 +757,7 @@ namespace InventorySystem.Forms
 
             try {
                 new InventoryService().SaveProductService(p);
+                if (_isRawMilk) new MilkProductionService().SyncRawMilkStock();
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             } catch (Exception ex) { MessageHelper.ShowError(ex.Message); }

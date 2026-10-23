@@ -25,7 +25,10 @@ namespace InventorySystem.Forms
         private Button btnDelete;
         private Label lblTotal;
         private CheckBox chkRecurring;
+        private ModernNumericUpDown numLiters;
+        private ModernComboBox cmbSupplier;
         private ExpenseService _expenseService = new ExpenseService();
+        private MilkProductionService _milkService = new MilkProductionService();
 
         public MonthlyExpensesForm()
         {
@@ -43,7 +46,7 @@ namespace InventorySystem.Forms
 
             TableLayoutPanel mainLayout = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3 };
             mainLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));  // Header
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 180F)); // Entry (Increased for labels)
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 230F)); // Entry (Increased for labels + milk row)
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F)); // Grid
             mainLayout.Padding = new Padding(20);
             this.Controls.Add(mainLayout);
@@ -88,7 +91,7 @@ namespace InventorySystem.Forms
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 320F)); // Actions
             
             grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 85F)); // Increased to 85 to prevent clipping
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F)); // Sub Row (Recurring)
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 85F)); // Sub Row (Recurring + milk liters/supplier)
 
             // 1. Category with Add Button
             TableLayoutPanel pnlCatContainer = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1, Margin = new Padding(15, 5, 5, 10), Width = 220 };
@@ -197,6 +200,45 @@ namespace InventorySystem.Forms
             grid.Controls.Add(pnlActions, 5, 0);
             grid.Controls.Add(chkRecurring, 0, 1);
 
+            // Milk intake: liters + supplier (optional; liters > 0 makes this a raw milk intake)
+            Panel pnlLitersWrapper = new Panel { Dock = DockStyle.Fill, Margin = new Padding(10, 5, 5, 10) };
+            numLiters = new ModernNumericUpDown
+            {
+                LabelText = LocalizationManager.GetString("Exp_MilkLiters", "Milk (Liters)"),
+                DecimalPlaces = 2,
+                Maximum = 1000000,
+                Width = 170
+            };
+            pnlLitersWrapper.Controls.Add(numLiters);
+            pnlLitersWrapper.Resize += (s, e) =>
+            {
+                numLiters.Width = pnlLitersWrapper.Width;
+                numLiters.Location = new Point(0, 0);
+            };
+
+            cmbSupplier = new ModernComboBox
+            {
+                Dock = DockStyle.Fill,
+                Margin = new Padding(5, 5, 5, 10),
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                LabelText = LocalizationManager.GetString("Milk_Supplier", "Supplier"),
+                Enabled = false
+            };
+
+            numLiters.ValueChanged += (s, e) =>
+            {
+                cmbSupplier.Enabled = numLiters.Value > 0;
+                if (numLiters.Value > 0 && cmbCategory.SelectedIndex == -1)
+                {
+                    int idx = cmbCategory.Items.IndexOf("Raw Milk");
+                    if (idx >= 0) cmbCategory.SelectedIndex = idx;
+                }
+            };
+
+            grid.Controls.Add(pnlLitersWrapper, 1, 1);
+            grid.Controls.Add(cmbSupplier, 2, 1);
+            grid.SetColumnSpan(cmbSupplier, 2);
+
             // Card for Entry Panel
             Panel pnlEntryCard = ThemeConfig.CreateCardPanel(grid);
             pnlEntryCard.Margin = new Padding(0, 0, 0, 15);
@@ -209,6 +251,8 @@ namespace InventorySystem.Forms
             dgvExpenses.Columns.Add(new DataGridViewTextBoxColumn { Name = "Date", HeaderText = LocalizationManager.GetString("Exp_Date"), DataPropertyName = "expense_date", Width = 130 });
             dgvExpenses.Columns.Add(new DataGridViewTextBoxColumn { Name = "Category", HeaderText = LocalizationManager.GetString("Exp_CategoryLabel"), DataPropertyName = "category", Width = 120 });
             dgvExpenses.Columns.Add(new DataGridViewTextBoxColumn { Name = "Amount", HeaderText = LocalizationManager.GetString("Exp_AmountLabel"), DataPropertyName = "amount", Width = 100 });
+            dgvExpenses.Columns.Add(new DataGridViewTextBoxColumn { Name = "Liters", HeaderText = LocalizationManager.GetString("Milk_Liters", "Liters"), DataPropertyName = "liters", Width = 80, DefaultCellStyle = { Format = "0.##" } });
+            dgvExpenses.Columns.Add(new DataGridViewTextBoxColumn { Name = "Supplier", HeaderText = LocalizationManager.GetString("Milk_Supplier", "Supplier"), DataPropertyName = "supplier_name", Width = 140 });
             dgvExpenses.Columns.Add(new DataGridViewTextBoxColumn { Name = "Description", HeaderText = LocalizationManager.GetString("Exp_DescriptionLabel"), DataPropertyName = "description", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
             
             // Hidden data columns
@@ -279,6 +323,10 @@ namespace InventorySystem.Forms
             {
                 numAmount.LabelText = LocalizationManager.GetString("Exp_AmountLabel");
             }
+            if (numLiters != null) numLiters.LabelText = LocalizationManager.GetString("Exp_MilkLiters", "Milk (Liters)");
+            if (cmbSupplier != null) cmbSupplier.LabelText = LocalizationManager.GetString("Milk_Supplier", "Supplier");
+            if (dgvExpenses.Columns.Contains("Liters")) dgvExpenses.Columns["Liters"].HeaderText = LocalizationManager.GetString("Milk_Liters", "Liters");
+            if (dgvExpenses.Columns.Contains("Supplier")) dgvExpenses.Columns["Supplier"].HeaderText = LocalizationManager.GetString("Milk_Supplier", "Supplier");
             if (lblDateRef != null)
             {
                 lblDateRef.Text = LocalizationManager.GetString("Hist_ColDate", "Date");
@@ -300,6 +348,7 @@ namespace InventorySystem.Forms
             }
             
             LoadCategories(); // Refresh categories in dropdown
+            LoadSuppliers();
         }
 
         private void ApplyTheme() 
@@ -321,13 +370,30 @@ namespace InventorySystem.Forms
                 return;
             }
 
-            DatabaseHelper.ExecuteNonQuery("INSERT INTO expenses (category, expense_date, amount, description, recorded_by, is_recurring, is_paid) VALUES (@cat, @date, @amt, @desc, @usr, @rec, 1)",
+            decimal liters = numLiters.Value;
+            int supplierId = cmbSupplier.SelectedValue != null ? Convert.ToInt32(cmbSupplier.SelectedValue) : -1;
+            if (liters > 0 && supplierId <= 0)
+            {
+                MessageHelper.ShowWarning(LocalizationManager.GetString("Exp_ReqMilkSupplier", "Choose the supplier the milk came from."));
+                return;
+            }
+
+            DatabaseHelper.ExecuteNonQuery("INSERT INTO expenses (category, expense_date, amount, description, recorded_by, is_recurring, is_paid, liters, supplier_id, unit_price) VALUES (@cat, @date, @amt, @desc, @usr, @rec, 1, @lit, @sup, @up)",
                 new SqliteParameter("@cat", cmbCategory.SelectedItem.ToString()),
                 new SqliteParameter("@date", dtpDate.Value),
                 new SqliteParameter("@amt", amount),
                 new SqliteParameter("@desc", txtDescription.Text),
                 new SqliteParameter("@usr", UserSession.Username),
-                new SqliteParameter("@rec", chkRecurring.Checked));
+                new SqliteParameter("@rec", chkRecurring.Checked),
+                new SqliteParameter("@lit", liters),
+                new SqliteParameter("@sup", liters > 0 ? (object)supplierId : DBNull.Value),
+                new SqliteParameter("@up", liters > 0 ? Math.Round(amount / liters, 4) : 0m));
+
+            if (liters > 0)
+            {
+                DatabaseHelper.LogTransaction("MILK_IN", "Raw Milk", $"Received {liters:0.##} L raw milk from {cmbSupplier.Text}");
+                _milkService.SyncRawMilkStock();
+            }
             
             ClearForm();
             LoadData();
@@ -357,7 +423,13 @@ namespace InventorySystem.Forms
             if (MessageHelper.ShowConfirmation(LocalizationManager.GetString("Exp_ConfirmDelete")))
             {
                 int id = Convert.ToInt32(dgvExpenses.SelectedRows[0].Cells["Id"].Value);
+                if (_milkService.HasProductions(id))
+                {
+                    MessageHelper.ShowWarning(LocalizationManager.GetString("Exp_MilkInUse", "This milk was already used in Milk Processing. Delete those productions first."));
+                    return;
+                }
                 DatabaseHelper.ExecuteNonQuery("DELETE FROM expenses WHERE expense_id = @id", new SqliteParameter("@id", id));
+                _milkService.SyncRawMilkStock();
                 LoadData();
             }
         }
@@ -368,20 +440,22 @@ namespace InventorySystem.Forms
             numAmount.Value = 0;
             txtDescription.Clear();
             dtpDate.Value = DateTime.Now;
+            numLiters.Value = 0;
+            cmbSupplier.SelectedValue = -1;
         }
 
         public void LoadData(string search = "")
         {
-            string query = "SELECT * FROM expenses WHERE category != 'System'";
+            string query = "SELECT e.*, s.supplier_name FROM expenses e LEFT JOIN suppliers s ON s.id = e.supplier_id WHERE e.category != 'System' AND e.date_deleted IS NULL";
             DataTable dt;
             if (!string.IsNullOrEmpty(search))
             {
-                query += " AND (category LIKE @s OR description LIKE @s)";
-                dt = DatabaseHelper.ExecuteDataTable(query + " ORDER BY expense_date DESC", new SqliteParameter("@s", "%" + search + "%"));
+                query += " AND (e.category LIKE @s OR e.description LIKE @s OR s.supplier_name LIKE @s)";
+                dt = DatabaseHelper.ExecuteDataTable(query + " ORDER BY e.expense_date DESC", new SqliteParameter("@s", "%" + search + "%"));
             }
             else
             {
-                dt = DatabaseHelper.ExecuteDataTable(query + " ORDER BY expense_date DESC");
+                dt = DatabaseHelper.ExecuteDataTable(query + " ORDER BY e.expense_date DESC");
             }
 
             dgvExpenses.DataSource = dt;
@@ -410,6 +484,18 @@ namespace InventorySystem.Forms
             {
                 cmbCategory.Items.Add(row["category_name"].ToString());
             }
+        }
+
+        private void LoadSuppliers()
+        {
+            if (cmbSupplier == null) return;
+            var sups = DatabaseHelper.ExecuteDataTable("SELECT id, supplier_name FROM suppliers WHERE date_deleted IS NULL ORDER BY supplier_name");
+            var dtSup = new DataTable();
+            dtSup.Columns.Add("id", typeof(int)); dtSup.Columns.Add("name", typeof(string));
+            dtSup.Rows.Add(-1, LocalizationManager.GetString("Exp_SelectSupplier", "- Select supplier -"));
+            foreach (DataRow r in sups.Rows) dtSup.Rows.Add(Convert.ToInt32(r["id"]), r["supplier_name"]);
+            cmbSupplier.DisplayMember = "name"; cmbSupplier.ValueMember = "id";
+            cmbSupplier.DataSource = dtSup;
         }
 
         private void BtnAddCategory_Click(object sender, EventArgs e)

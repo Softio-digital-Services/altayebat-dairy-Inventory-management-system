@@ -31,16 +31,18 @@ namespace InventorySystem.Helpers.Plugins
             if (!Directory.Exists(pluginsDir))
             {
                 try { Directory.CreateDirectory(pluginsDir); } catch { }
-                return; // No plugins yet -- that's perfectly fine
             }
 
-            // Also load internal (in-tree) plugins shipped with the core app
+            // Always load internal (in-tree) plugins shipped with the core app
             LoadInternalPlugins();
 
             // Then scan the /Plugins folder for external DLLs
-            foreach (string dll in Directory.GetFiles(pluginsDir, "*.dll", SearchOption.TopDirectoryOnly))
+            if (Directory.Exists(pluginsDir))
             {
-                LoadAssembly(dll);
+                foreach (string dll in Directory.GetFiles(pluginsDir, "*.dll", SearchOption.TopDirectoryOnly))
+                {
+                    LoadAssembly(dll);
+                }
             }
 
             // Sort tab plugins by TabOrder and register them
@@ -101,6 +103,7 @@ namespace InventorySystem.Helpers.Plugins
             TryRegister(new InventorySystem.Plugins.SuppliersPlugin());
             TryRegister(new InventorySystem.Plugins.QuotationsPlugin());
             TryRegister(new InventorySystem.Plugins.MonthlyExpensesPlugin());
+            TryRegister(new InventorySystem.Plugins.MilkProductionPlugin());
             TryRegister(new InventorySystem.Plugins.BarcodeLabelsPlugin());
         }
 

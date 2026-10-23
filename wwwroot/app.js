@@ -7,6 +7,57 @@ const T = {
         nav_dashboard: 'Dashboard', nav_inventory: 'Inventory', nav_pos: 'POS', nav_sales: 'Sales',
         nav_reports: 'Reports', nav_history: 'History', nav_quotations: 'Quotations',
         nav_customers: 'Customers', nav_suppliers: 'Suppliers', nav_expenses: 'Expenses',
+        nav_milk_processing: 'Milk Processing', milk_show_finished: 'Show fully used', milk_intakes: 'Raw milk received',
+        milk_productions: 'What was made', milk_used: 'Used', milk_remaining: 'Remaining', mp_liters: 'Liters',
+        milk_product: 'Product made', milk_liters_used: 'Milk used (L)', milk_made: 'Quantity made', milk_notes: 'Notes',
+        milk_record_production: 'Record what was made', milk_process_btn: 'Process', milk_raw_stock: 'Raw milk in stock',
+        milk_total_received: 'Milk received', milk_total_used: 'Milk processed', milk_no_intakes: 'No milk with liters left. Record milk intake in Expenses.',
+        milk_no_productions: 'Nothing made yet.', milk_left: 'L left', milk_confirm_delete: 'Delete this production? The quantity made will be removed from stock.',
+        milk_from: 'From',
+        rep_activity: 'Activity in this period',
+        rep_trend: 'Sales vs expenses',
+        rep_trend_daily: 'Sales vs expenses per day',
+        rep_trend_monthly: 'Sales vs expenses per month',
+        rep_sales_short: 'Sales',
+        rep_expenses_short: 'Expenses',
+        rep_tab_products: 'Products sold',
+        rep_tab_categories: 'Sales by category',
+        rep_tab_expenses: 'Expenses',
+        rep_tab_expcats: 'Expenses by category',
+        rep_tab_milk: 'Milk deliverers',
+        rep_period_fmt: 'Report for {0} → {1} ({2} days)',
+        rep_money_in: 'Money in (sales)',
+        rep_money_in_sub: '{0} orders · average {1} per order',
+        rep_cogs: 'Cost of goods sold',
+        rep_cogs_sub: 'What the sold items cost you',
+        rep_all_expenses: 'Expenses',
+        rep_all_expenses_sub: 'Milk {0} · Other {1}',
+        rep_net_profit: 'Net profit',
+        rep_net_profit_sub: 'Sales − Cost − Expenses',
+        rep_net_loss: 'Net loss',
+        rep_orders: 'Orders',
+        rep_items_sold: 'Items sold',
+        rep_unpaid_sales: 'Unpaid sales',
+        rep_unpaid_sales_sub: '{0} orders still to collect',
+        rep_returns: 'Returns / refunds',
+        rep_returns_sub: '{0} returns',
+        rep_milk_received: 'Raw milk received',
+        rep_milk_owed: 'Owed to milk deliverers',
+        rep_expense_entries: 'Expense entries',
+        rep_gross_profit: 'Gross profit',
+        rep_margin: 'Margin',
+        rep_avg_price: 'Avg price',
+        rep_share: 'Share',
+        rep_cost_col: 'Cost',
+        rep_total_row: 'Total',
+        rep_nothing: 'Nothing in this period.',
+        rep_all_categories: 'All categories',
+        rep_details: 'Supplier / details',
+        rep_count: 'Entries', nav_order_title: 'Sidebar order', nav_order_reset: 'Reset to default',
+        nav_order_hint: 'Only Softio Super Admin can change the order of the sidebar items. The order applies to all users.',
+        nav_order_up: 'Move up', nav_order_down: 'Move down', sales_orders_count: 'orders', milk_search_ph: 'Search or scan barcode...', milk_new_item: 'New item',
+        milk_all_categories: 'All categories', milk_pick_product: 'Choose the product that was made.',
+        milk_no_match: 'No matching products.', milk_barcode_not_found: 'No product with this barcode.',
         nav_currencies: 'Currencies', nav_barcodes: 'Barcodes', nav_users: 'Users', nav_settings: 'Settings',
         dash_subtitle: 'Overview of your inventory business', inv_subtitle: 'Manage parts and stock levels',
         pos_subtitle: 'Scan or tap products to sell', sales_subtitle: 'Order history and returns',
@@ -67,6 +118,8 @@ const T = {
         print_settings_fail: 'Could not save print settings',
         users_subtitle: 'Accounts and roles', settings_subtitle: 'Language, license and appearance',
         settings_general: 'General', settings_language_hint: 'Choose the app display language.',
+        settings_zoom: 'Display size', settings_zoom_hint: 'Make everything in the app bigger or smaller.',
+        settings_zoom_smaller: 'Smaller', settings_zoom_bigger: 'Bigger', settings_zoom_reset: 'Reset',
         recent_sales: 'Recent Sales', add_product: 'Add Product', add_expense: 'Add Expense',
         search_ph: 'Search...', cart_title: 'Cart', clear: 'Clear', subtotal: 'Subtotal', total: 'Total',
         checkout: 'Checkout', cancel: 'Cancel', save: 'Save', print: 'Print', convert: 'Confirm',
@@ -88,6 +141,8 @@ const T = {
         all: 'All', in_stock: 'In Stock', low_stock: 'Low Stock', out_of_stock: 'Out of Stock',
         pos_out_of_stock_title: 'Out of stock',
         pos_out_of_stock_msg: '"{0}" is out of stock.',
+        pos_not_enough_weight: 'Not enough stock for "{0}" — only {1} kg left. Weight set to the maximum.',
+        pos_max_stock_reached: 'Only {1} of "{0}" in stock.',
         pos_insufficient_stock_title: 'Insufficient stock',
         pos_insufficient_weight_msg: 'Not enough stock for "{0}".\n\nRequested weight: {1} kg\nAvailable in inventory: {2} kg',
         pos_sell_anyway: 'Sell anyway (no stock)',
@@ -227,10 +282,10 @@ const T = {
         col_image: 'Image', col_min_stock: 'Min Stock', col_location: 'Location', col_cost: 'Cost', col_supplier: 'Supplier',
         item_type: 'Type', type_product: 'Product', type_service: 'Service',
         sell_by: 'How is this sold?', sell_by_piece: 'Fixed price — piece, box, or pack', sell_by_weight: 'By weight — price per kilogram',
-        sell_by_hint: 'Bulk chocolate: Price = $/kg. Stock in grams (5000 = 5 kg).',
+        sell_by_hint: 'Sold by weight: Price = $/kg. Stock in grams (5000 = 5 kg).',
         sell_by_hint_piece: 'Pick the unit below (pcs / box / pack). Price is for one unit; stock is how many you have.',
         weight_guide_title: 'Weight product setup',
-        weight_guide_1: 'Set Price / kg for this chocolate type (example: 40 = $40 for 1 kg).',
+        weight_guide_1: 'Set Price / kg for this product (example: 40 = $40 for 1 kg).',
         weight_guide_2: 'Set Stock (g) in grams (example: 5000 = 5 kg on the shelf, 1000 g = 1 kg).',
         weight_guide_3: 'At POS: Weigh → enter kg or Read scale → Add to cart.',
         price_per_kg: 'Price / kg', price_per_kg_hint: 'Enter the price of 1 kg. POS multiplies by the weighed amount.',
@@ -247,7 +302,7 @@ const T = {
         weigh_btn: 'Weigh', weight_badge: 'By Weight',
         per_kg: '/kg',
         scale_pick_product: 'Press on a weight product below',
-        scale_weight_lbl: 'Weight (g)', scale_price_lbl: 'Price',
+        scale_weight_lbl: 'Weight (g)', scale_price_lbl: 'Price', scale_price_hint: 'Type a price to calculate the weight',
         scale_read: 'Read scale', scale_add_cart: 'Add to cart',
         scale_selected: 'Selected',
         scale_manual_hint: 'Enter grams (g). Example: 1000 = 1.000 kg | 1250 = 1.250 kg',
@@ -342,6 +397,57 @@ const T = {
         nav_dashboard: 'لوحة التحكم', nav_inventory: 'المخزون', nav_pos: 'نقطة البيع', nav_sales: 'المبيعات',
         nav_reports: 'التقارير', nav_history: 'السجل', nav_quotations: 'عروض الأسعار',
         nav_customers: 'العملاء', nav_suppliers: 'الموردون', nav_expenses: 'المصروفات',
+        nav_milk_processing: 'تصنيع الحليب', milk_show_finished: 'إظهار المستهلك بالكامل', milk_intakes: 'الحليب الخام المستلم',
+        milk_productions: 'ما تم تصنيعه', milk_used: 'المستخدم', milk_remaining: 'المتبقي', mp_liters: 'لتر',
+        milk_product: 'المنتج المصنّع', milk_liters_used: 'الحليب المستخدم (لتر)', milk_made: 'الكمية المصنّعة', milk_notes: 'ملاحظات',
+        milk_record_production: 'تسجيل ما تم تصنيعه', milk_process_btn: 'تصنيع', milk_raw_stock: 'الحليب الخام في المخزون',
+        milk_total_received: 'الحليب المستلم', milk_total_used: 'الحليب المصنّع', milk_no_intakes: 'لا يوجد حليب متبقٍ. سجّل استلام الحليب من المصروفات.',
+        milk_no_productions: 'لم يتم تصنيع شيء بعد.', milk_left: 'لتر متبقي', milk_confirm_delete: 'حذف عملية التصنيع؟ سيتم خصم الكمية المصنّعة من المخزون.',
+        milk_from: 'من',
+        rep_activity: 'النشاط في هذه الفترة',
+        rep_trend: 'المبيعات مقابل المصاريف',
+        rep_trend_daily: 'المبيعات مقابل المصاريف يومياً',
+        rep_trend_monthly: 'المبيعات مقابل المصاريف شهرياً',
+        rep_sales_short: 'المبيعات',
+        rep_expenses_short: 'المصاريف',
+        rep_tab_products: 'المنتجات المباعة',
+        rep_tab_categories: 'المبيعات حسب الفئة',
+        rep_tab_expenses: 'المصاريف',
+        rep_tab_expcats: 'المصاريف حسب الفئة',
+        rep_tab_milk: 'موردو الحليب',
+        rep_period_fmt: 'تقرير من {0} إلى {1} ({2} يوم)',
+        rep_money_in: 'الدخل (المبيعات)',
+        rep_money_in_sub: '{0} طلب · المتوسط {1} للطلب',
+        rep_cogs: 'تكلفة البضاعة المباعة',
+        rep_cogs_sub: 'كم كلفتك الأصناف المباعة',
+        rep_all_expenses: 'المصاريف',
+        rep_all_expenses_sub: 'حليب {0} · أخرى {1}',
+        rep_net_profit: 'صافي الربح',
+        rep_net_profit_sub: 'المبيعات − التكلفة − المصاريف',
+        rep_net_loss: 'صافي الخسارة',
+        rep_orders: 'الطلبات',
+        rep_items_sold: 'الكمية المباعة',
+        rep_unpaid_sales: 'مبيعات غير مدفوعة',
+        rep_unpaid_sales_sub: '{0} طلب بانتظار التحصيل',
+        rep_returns: 'المرتجعات',
+        rep_returns_sub: '{0} مرتجع',
+        rep_milk_received: 'الحليب الخام المستلم',
+        rep_milk_owed: 'المستحق لموردي الحليب',
+        rep_expense_entries: 'عدد المصاريف',
+        rep_gross_profit: 'الربح الإجمالي',
+        rep_margin: 'الهامش',
+        rep_avg_price: 'متوسط السعر',
+        rep_share: 'النسبة',
+        rep_cost_col: 'التكلفة',
+        rep_total_row: 'الإجمالي',
+        rep_nothing: 'لا يوجد شيء في هذه الفترة.',
+        rep_all_categories: 'كل الفئات',
+        rep_details: 'المورد / التفاصيل',
+        rep_count: 'العدد', nav_order_title: 'ترتيب القائمة الجانبية', nav_order_reset: 'استعادة الترتيب الافتراضي',
+        nav_order_hint: 'فقط مشرف Softio يمكنه تغيير ترتيب عناصر القائمة الجانبية. يطبق الترتيب على جميع المستخدمين.',
+        nav_order_up: 'تحريك للأعلى', nav_order_down: 'تحريك للأسفل', sales_orders_count: 'طلب', milk_search_ph: 'ابحث أو امسح الباركود...', milk_new_item: 'صنف جديد',
+        milk_all_categories: 'كل الفئات', milk_pick_product: 'اختر المنتج الذي تم تصنيعه.',
+        milk_no_match: 'لا توجد منتجات مطابقة.', milk_barcode_not_found: 'لا يوجد منتج بهذا الباركود.',
         nav_currencies: 'العملات', nav_barcodes: 'الباركود', nav_users: 'المستخدمون', nav_settings: 'الإعدادات',
         dash_subtitle: 'نظرة عامة على نشاطك', inv_subtitle: 'إدارة القطع ومستويات المخزون',
         pos_subtitle: 'امسح أو اضغط على المنتجات للبيع', sales_subtitle: 'سجل الطلبات والمرتجعات',
@@ -402,6 +508,8 @@ const T = {
         print_settings_fail: 'تعذر حفظ إعدادات الطباعة',
         users_subtitle: 'الحسابات والصلاحيات', settings_subtitle: 'اللغة والترخيص والمظهر',
         settings_general: 'عام', settings_language_hint: 'اختر لغة واجهة التطبيق.',
+        settings_zoom: 'حجم العرض', settings_zoom_hint: 'تكبير أو تصغير كل شيء في التطبيق.',
+        settings_zoom_smaller: 'أصغر', settings_zoom_bigger: 'أكبر', settings_zoom_reset: 'إعادة الضبط',
         recent_sales: 'أحدث المبيعات', add_product: 'إضافة منتج', add_expense: 'إضافة مصروف',
         search_ph: 'بحث...', cart_title: 'السلة', clear: 'مسح', subtotal: 'المجموع الفرعي', total: 'الإجمالي',
         checkout: 'إتمام الدفع', cancel: 'إلغاء', save: 'حفظ', print: 'طباعة', convert: 'تأكيد',
@@ -422,6 +530,8 @@ const T = {
         all: 'الكل', in_stock: 'متوفر', low_stock: 'منخفض', out_of_stock: 'نفد',
         pos_out_of_stock_title: 'نفد المخزون',
         pos_out_of_stock_msg: '"{0}" نفد من المخزون.',
+        pos_not_enough_weight: 'الكمية غير كافية من "{0}" — المتوفر {1} كغ فقط. تم ضبط الوزن على الحد الأقصى.',
+        pos_max_stock_reached: 'المتوفر من "{0}" هو {1} فقط.',
         pos_insufficient_stock_title: 'المخزون غير كافٍ',
         pos_insufficient_weight_msg: 'الكمية المطلوبة من "{0}" غير متوفرة بالكامل في المخزون.\n\nالوزن المطلوب: {1} كغ\nالمتوفر في المخزن: {2} كغ',
         pos_sell_anyway: 'بيع بدون خصم مخزون',
@@ -559,7 +669,7 @@ const T = {
         col_image: 'الصورة', col_min_stock: 'الحد الأدنى', col_location: 'الموقع', col_cost: 'التكلفة', col_supplier: 'المورد',
         upload_image: 'رفع صورة', change_image: 'تغيير', remove_image: 'إزالة', item_type: 'النوع', type_product: 'منتج', type_service: 'خدمة',
         sell_by: 'كيف يُباع؟', sell_by_piece: 'سعر ثابت — قطعة أو علبة أو عبوة', sell_by_weight: 'بالوزن — السعر لكل كيلوغرام',
-        sell_by_hint: 'شوكولا بالوزن: السعر = $/كغ. المخزون بالغرام (5000 = 5 كغ).',
+        sell_by_hint: 'يباع بالوزن: السعر = $/كغ. المخزون بالغرام (5000 = 5 كغ).',
         sell_by_hint_piece: 'اختر الوحدة أدناه (قطعة / علبة / عبوة). السعر لوحدة واحدة؛ المخزون = الكمية المتوفرة.',
         weight_guide_title: 'إعداد منتج بالوزن',
         weight_guide_1: 'ضع السعر / كغ لهذا النوع (مثال: 40 = 40$ لكل 1 كغ).',
@@ -579,7 +689,7 @@ const T = {
         weigh_btn: 'وزن', weight_badge: 'بالوزن',
         per_kg: '/كغ',
         scale_pick_product: 'اضغط على منتج بالوزن من الأسفل',
-        scale_weight_lbl: 'الوزن (غ)', scale_price_lbl: 'السعر',
+        scale_weight_lbl: 'الوزن (غ)', scale_price_lbl: 'السعر', scale_price_hint: 'اكتب السعر لحساب الوزن',
         scale_read: 'قراءة الميزان', scale_add_cart: 'إضافة للسلة',
         scale_selected: 'المحدد',
         scale_manual_hint: 'أدخل الغرام (غ). مثال: 1000 = 1.000 كغ | 1250 = 1.250 كغ',
@@ -707,6 +817,8 @@ const LABEL_PRESETS = {
 let products = [], categories = [], sales = [], customers = [], suppliers = [], users = [];
 let expenses = [], quotations = [], currencies = [], barcodeItems = [], expenseCategories = [];
 let dashboard = null, reportSummary = null, reportTop = [], reportExpensesBreakdown = { milkSuppliers: [], categories: [] };
+let reportProducts = [], reportCategories = [], reportExpensesList = [], reportTrend = [];
+let repTab = 'products', repSort = { key: null, dir: -1 };
 let cart = [], invCat = 'all', posCat = 'all', invFilter = 'all', invView = 'card';
 let invSelected = new Set();
 let barcodeSelected = new Set();
@@ -779,6 +891,9 @@ function applyFeatureFlags(flags) {
 
     const softioQsCard = document.getElementById('softio-quicksale-card');
     if (softioQsCard) softioQsCard.hidden = !isSoftioSuperAdmin();
+
+    const softioNavCard = document.getElementById('softio-navorder-card');
+    if (softioNavCard) softioNavCard.hidden = !isSoftioSuperAdmin();
 
     const toggle = document.getElementById('feature-scale-toggle');
     if (toggle) toggle.checked = featureFlags.scaleEnabled;
@@ -1209,6 +1324,15 @@ function makeCartLine(p, qty = 1, price = null, opts = {}) {
     };
 }
 
+// Red toasts instead of stock popups (selling beyond stock is not allowed)
+function toastOutOfStock(name) {
+    toast(tr('pos_out_of_stock_msg').replace('{0}', name || ''), 'error');
+}
+function toastMaxStock(name, available, isWeight) {
+    const amt = isWeight ? `${(Math.max(0, Number(available) || 0) / 1000).toFixed(3)} ${tr('unit_kg')}` : String(Math.max(0, Number(available) || 0));
+    toast(tr('pos_max_stock_reached').replace('{0}', name || '').replace('{1}', amt), 'error');
+}
+
 function addToCart(id, qty = 1, opts = {}) {
     const p = products.find(x => x.id === id); if (!p) return false;
     lastTappedProductId = id;
@@ -1223,11 +1347,7 @@ function addToCart(id, qty = 1, opts = {}) {
                 .filter(x => x.id === p.id && !x.skipStock)
                 .reduce((sum, x) => sum + (x.stockQty != null ? Number(x.stockQty) : Math.round((Number(x.weightKg) || Number(x.qty) || 0) * 1000)), 0);
             if (inCartStock + opts.stockQty > (Number(p.stock) || 0)) {
-                if (!opts.silentStockError) {
-                    const reqKg = (opts.stockQty / 1000).toFixed(3);
-                    const remKg = (Math.max(0, (Number(p.stock) || 0) - inCartStock) / 1000).toFixed(3);
-                    showOutOfStockWeightPopup(p.name, reqKg, remKg);
-                }
+                if (!opts.silentStockError) toastMaxStock(p.name, (Number(p.stock) || 0) - inCartStock, true);
                 return false;
             }
         }
@@ -1243,14 +1363,14 @@ function addToCart(id, qty = 1, opts = {}) {
     const line = cart.find(x => x.id === id && !x.weighted && !!x.skipStock === !!skipStock);
     if (line) {
         if (line.qty + qty > line.max) {
-            if (!skipStock) showOutOfStockPopup(p.name);
+            if (!skipStock) toastMaxStock(p.name, line.max, false);
             return false;
         }
         line.qty += qty;
     } else {
         const row = makeCartLine(p, qty, opts.price != null ? opts.price : null, { ...opts, skipStock });
         if (row.qty > row.max) {
-            if (!skipStock) showOutOfStockPopup(p.name);
+            if (!skipStock) toastMaxStock(p.name, row.max, false);
             return false;
         }
         cart.push(row);
@@ -1479,15 +1599,15 @@ function formatRole(role) {
     return role || '—';
 }
 const money = (n) => '$' + (Number(n) || 0).toFixed(2);
-const posCurrencyMeta = () => {
-    const sel = document.getElementById('pos-currency');
-    const code = (sel?.value || 'USD').toString().trim().toUpperCase() || 'USD';
+const posCurrencyMeta = () => currencyMetaFor(document.getElementById('pos-currency')?.value);
+function currencyMetaFor(codeIn) {
+    const code = (codeIn || 'USD').toString().trim().toUpperCase() || 'USD';
     const cur = (currencies || []).find(c => String(c.code || c.Code || '').toUpperCase() === code);
     let rate = Number(cur?.rate ?? cur?.Rate);
     if (!(rate > 0)) rate = code === 'USD' ? 1 : 1;
     const symbol = (cur?.symbol || cur?.Symbol || (code === 'USD' ? '$' : code === 'LBP' ? 'ل.ل.' : code + ' ')).toString();
     return { code, rate, symbol };
-};
+}
 /** Format a USD-base amount in the active POS currency (with commas; LBP has no decimals). */
 function formatPosAmount(usdAmount) {
     const { code, rate } = posCurrencyMeta();
@@ -1879,8 +1999,15 @@ async function loadReports() {
         qs.set('to', to);
     }
     try {
-        reportSummary = await api('/api/reports/summary?' + qs.toString());
-        reportTop = await api('/api/reports/top-products?' + qs.toString());
+        const q = qs.toString();
+        [reportSummary, reportProducts, reportCategories, reportExpensesList, reportTrend] = await Promise.all([
+            api('/api/reports/summary?' + q),
+            api('/api/reports/products?' + q).catch(() => []),
+            api('/api/reports/categories?' + q).catch(() => []),
+            api('/api/reports/expenses?' + q).catch(() => []),
+            api('/api/reports/trend?' + q).catch(() => [])
+        ]);
+        reportTop = reportProducts;
         try {
             reportExpensesBreakdown = await api('/api/reports/expenses-breakdown?' + qs.toString());
         } catch {
@@ -1912,8 +2039,11 @@ function formatLocalDate(d) {
 }
 
 function syncReportDateInputs(preset) {
-    const fromEl = document.getElementById('report-from');
-    const toEl = document.getElementById('report-to');
+    syncDateRangeInputs(preset, document.getElementById('report-from'), document.getElementById('report-to'));
+}
+
+// Fill a From/To pair from a preset (Daily / Weekly / Monthly / Yearly / Custom)
+function syncDateRangeInputs(preset, fromEl, toEl) {
     if (!fromEl || !toEl) return;
     const today = new Date();
     const setRange = (from, to) => {
@@ -2191,9 +2321,7 @@ function renderPOS() {
             const p = products.find(x => x.id === id);
             if (!p) return;
             if (!isPosProductAvailable(p)) {
-                if (await showOutOfStockPopup(p.name)) {
-                    addToCart(id, 1, { allowZeroStock: true, skipStock: true });
-                }
+                toastOutOfStock(p.name);
                 return;
             }
             scaleManager.selectForWeighing(p);
@@ -2207,15 +2335,7 @@ function renderPOS() {
             const id = Number(card.dataset.id);
             const p = products.find(x => x.id === id);
             if (!isPosProductAvailable(p)) {
-                if (await showOutOfStockPopup(p?.name)) {
-                    if (isSellByWeight(p)) {
-                        scaleManager.selectForWeighing(p);
-                        renderPOS();
-                        document.getElementById('scaleManualWeight')?.focus();
-                    } else {
-                        addToCart(id, 1, { allowZeroStock: true, skipStock: true });
-                    }
-                }
+                toastOutOfStock(p?.name);
                 return;
             }
             if (isSellByWeight(p)) {
@@ -2388,93 +2508,270 @@ function renderPosStats() {
     if (pendingEl) pendingEl.textContent = String(d.pendingOrders ?? 0);
 }
 
+const fmtTr = (key, ...vals) => vals.reduce((t, v, i) => t.replace('{' + i + '}', v), tr(key));
+const repNum = (v) => Number(v) || 0;
+const repQty = (v) => { const n = repNum(v); return Number.isInteger(n) ? n.toLocaleString() : n.toLocaleString(undefined, { maximumFractionDigits: 3 }); };
+const repPct = (v) => (Number.isFinite(v) ? (v * 100).toFixed(1) : '0.0') + '%';
+
 function renderReports() {
     const s = reportSummary || {};
-    const d = dashboard || {};
-    const grid = document.getElementById('report-stats');
-    if (!grid) return;
-    const rangeLabel = (s.fromDate && s.toDate)
-        ? `${toInputDate(s.fromDate)} → ${toInputDate(s.toDate)}`
-        : '';
-    const cards = [
-        { label: tr('rep_sales'), value: money(s.totalSales), sub: rangeLabel, cls: '' },
-        { label: tr('rep_cost'), value: money(s.totalCost), sub: '', cls: '' },
-        { label: tr('rep_expenses'), value: money(s.totalExpenses), sub: '', cls: '' },
-        { label: tr('rep_profit_before_expenses'), value: money(s.totalProfit), sub: '', cls: 'stat-profit' },
-        { label: tr('rep_profit_after_expenses'), value: money(s.totalProfitAfterExpenses), sub: '', cls: 'stat-profit-net' },
-        { label: tr('pos_orders'), value: String(d.ordersToday ?? 0), sub: tr('orders_today'), cls: '' },
-        { label: tr('pos_pending'), value: String(d.pendingOrders ?? 0), sub: '', cls: '' },
-    ];
-    if (Number(s.totalMilkLiters || 0) > 0 || Number(s.totalMilkExpenses || 0) > 0) {
-        cards.push({ label: tr('col_liters'), value: Number(s.totalMilkLiters || 0).toLocaleString() + ' L', sub: tr('exp_filter_milk'), cls: 'stat-milk' });
-        cards.push({ label: tr('milk_cost'), value: money(s.totalMilkExpenses || 0), sub: '', cls: 'stat-milk' });
-        if (Number(s.totalUnpaidMilkExpenses || 0) > 0) {
-            cards.push({ label: tr('unpaid_milk_balance'), value: money(s.totalUnpaidMilkExpenses || 0), sub: tr('due_to_deliverers'), cls: 'stat-due' });
-        }
-    }
-    const seen = new Set();
-    grid.innerHTML = cards.filter(c => {
-        const key = String(c.label || '').trim().toLowerCase();
-        if (!key || seen.has(key)) return false;
-        seen.add(key);
-        return true;
-    }).map(c => `
-        <div class="stat-card ${c.cls || ''}"><div class="label">${escapeHtml(c.label)}</div><div class="value">${c.value}</div>
-            ${c.sub ? `<div class="stat-sub">${escapeHtml(c.sub)}</div>` : ''}</div>`).join('');
-    const rows = reportTop || [];
-    document.getElementById('report-top-body').innerHTML = rows.length ? rows.map(r => `
-        <tr><td>${escapeHtml(r.product_name || r.ProductName || '')}</td>
-        <td>${r.quantity_sold ?? r.QuantitySold ?? 0}</td>
-        <td>${money(r.total_sales ?? r.TotalSales)}</td>
-        <td>${money(r.profit ?? r.Profit)}</td></tr>`).join('')
-        : `<tr><td colspan="4" class="empty-state">${tr('empty_list')}</td></tr>`;
+    const from = toInputDate(s.fromDate), to = toInputDate(s.toDate);
+    const days = (from && to) ? Math.round((new Date(to) - new Date(from)) / 86400000) + 1 : 0;
+    const period = document.getElementById('rep-period');
+    if (period) period.textContent = from ? fmtTr('rep_period_fmt', from, to, days) : '';
 
-    // Render Milk Deliverers Breakdown
+    // Money summary
+    const sales = repNum(s.totalSales), cost = repNum(s.totalCost), exp = repNum(s.totalExpenses);
+    const net = sales - cost - exp;
+    const orders = repNum(s.orderCount);
+    const money4 = [
+        { cls: 'rep-m-sales', icon: 'payments', label: tr('rep_money_in'), value: money(sales), sub: fmtTr('rep_money_in_sub', orders, money(orders ? sales / orders : 0)) },
+        { cls: 'rep-m-cost', icon: 'inventory_2', label: tr('rep_cogs'), value: money(cost), sub: tr('rep_cogs_sub') },
+        { cls: 'rep-m-exp', icon: 'receipt_long', label: tr('rep_all_expenses'), value: money(exp), sub: fmtTr('rep_all_expenses_sub', money(s.totalMilkExpenses), money(s.totalGeneralExpenses)) },
+        { cls: net >= 0 ? 'rep-m-profit' : 'rep-m-loss', icon: net >= 0 ? 'trending_up' : 'trending_down', label: tr(net >= 0 ? 'rep_net_profit' : 'rep_net_loss'), value: money(Math.abs(net)), sub: tr('rep_net_profit_sub') }
+    ];
+    const moneyEl = document.getElementById('rep-money');
+    if (moneyEl) moneyEl.innerHTML = money4.map(c => `
+        <div class="rep-money-card ${c.cls}">
+            <div class="rep-money-top"><span class="material-symbols-rounded">${c.icon}</span><span class="rep-money-label">${escapeHtml(c.label)}</span></div>
+            <div class="rep-money-value">${c.value}</div>
+            <div class="rep-money-sub">${escapeHtml(c.sub)}</div>
+        </div>`).join('');
+
+    // Activity (all for the chosen period)
+    const acts = [
+        { label: tr('rep_orders'), value: orders.toLocaleString() },
+        { label: tr('rep_items_sold'), value: repQty(s.itemsSold) },
+        { label: tr('rep_unpaid_sales'), value: money(s.unpaidTotal), sub: fmtTr('rep_unpaid_sales_sub', repNum(s.unpaidCount)), warn: repNum(s.unpaidTotal) > 0 },
+        { label: tr('rep_returns'), value: money(s.returnsTotal), sub: fmtTr('rep_returns_sub', repNum(s.returnsCount)) },
+        { label: tr('rep_milk_received'), value: repQty(s.totalMilkLiters) + ' L', sub: money(s.totalMilkExpenses) },
+        { label: tr('rep_milk_owed'), value: money(s.totalUnpaidMilkExpenses), warn: repNum(s.totalUnpaidMilkExpenses) > 0 },
+        { label: tr('rep_expense_entries'), value: repNum(s.expenseCount).toLocaleString() }
+    ];
+    const actEl = document.getElementById('rep-activity');
+    if (actEl) actEl.innerHTML = acts.map(a => `
+        <div class="rep-act-card ${a.warn ? 'is-warn' : ''}">
+            <div class="rep-act-label">${escapeHtml(a.label)}</div>
+            <div class="rep-act-value">${a.value}</div>
+            ${a.sub ? `<div class="rep-act-sub">${escapeHtml(a.sub)}</div>` : ''}
+        </div>`).join('');
+
+    renderReportTrend();
+    renderReportTable();
+    renderReportMilk();
+}
+
+// Grouped bars (sales, expenses) on one money axis. Inline SVG, hover tooltip per period.
+function renderReportTrend() {
+    const box = document.getElementById('rep-trend');
+    if (!box) return;
+    const data = reportTrend || [];
+    const monthly = data.length && String(data[0].period).length === 7;
+    const title = document.getElementById('rep-trend-title');
+    if (title) title.textContent = tr(monthly ? 'rep_trend_monthly' : 'rep_trend_daily');
+    const max = Math.max(0, ...data.map(d => Math.max(repNum(d.sales), repNum(d.expenses))));
+    if (!data.length || max <= 0) { box.innerHTML = `<div class="rep-empty">${escapeHtml(tr('rep_nothing'))}</div>`; return; }
+
+    const W = 1000, H = 240, padL = 64, padR = 12, padT = 12, padB = 30;
+    const plotW = W - padL - padR, plotH = H - padT - padB;
+    const step = (() => { const raw = max / 4; const mag = Math.pow(10, Math.floor(Math.log10(raw))); const n = raw / mag; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * mag; })();
+    const top = Math.ceil(max / step) * step;
+    const y = v => padT + plotH - (repNum(v) / top) * plotH;
+    const slot = plotW / data.length;
+    const barW = Math.max(2, Math.min(22, (slot - 6) / 2));
+    const every = Math.ceil(data.length / 12);
+    const label = p => monthly ? p : p.slice(5);
+    const bar = (x, v, cls) => {
+        const h = Math.max(0, padT + plotH - y(v));
+        if (h <= 0) return '';
+        const r = Math.min(4, barW / 2, h);
+        const yt = padT + plotH - h, yb = padT + plotH;
+        return `<path class="${cls}" d="M${x},${yb} V${yt + r} Q${x},${yt} ${x + r},${yt} H${x + barW - r} Q${x + barW},${yt} ${x + barW},${yt + r} V${yb} Z"/>`;
+    };
+    let grid = '';
+    for (let v = 0; v <= top + 1e-9; v += step) {
+        const yy = y(v);
+        grid += `<line class="rep-grid" x1="${padL}" x2="${W - padR}" y1="${yy}" y2="${yy}"/><text class="rep-axis" x="${padL - 8}" y="${yy + 4}" text-anchor="end">${money(v).replace('.00', '')}</text>`;
+    }
+    let bars = '', hits = '', xl = '';
+    data.forEach((d, i) => {
+        const x0 = padL + i * slot + (slot - (barW * 2 + 2)) / 2;
+        bars += bar(x0, d.sales, 'rep-bar-sales') + bar(x0 + barW + 2, d.expenses, 'rep-bar-exp');
+        hits += `<rect class="rep-hit" x="${padL + i * slot}" y="${padT}" width="${slot}" height="${plotH}" data-i="${i}"/>`;
+        if (i % every === 0) xl += `<text class="rep-axis" x="${padL + i * slot + slot / 2}" y="${H - 10}" text-anchor="middle">${escapeHtml(label(d.period))}</text>`;
+    });
+    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${escapeHtml(tr('rep_trend'))}">${grid}${bars}${xl}${hits}</svg>`;
+
+    const tip = document.getElementById('rep-tooltip');
+    box.querySelectorAll('.rep-hit').forEach(h => {
+        h.addEventListener('mousemove', e => {
+            const d = data[Number(h.dataset.i)];
+            const net = repNum(d.sales) - repNum(d.expenses);
+            tip.innerHTML = `<strong>${escapeHtml(d.period)}</strong>
+                <div><span class="rep-swatch rep-swatch-sales"></span>${escapeHtml(tr('rep_sales_short'))}: <b>${money(d.sales)}</b></div>
+                <div><span class="rep-swatch rep-swatch-exp"></span>${escapeHtml(tr('rep_expenses_short'))}: <b>${money(d.expenses)}</b></div>`;
+            const card = box.closest('.rep-trend-card').getBoundingClientRect();
+            tip.hidden = false;
+            tip.style.left = Math.min(card.width - tip.offsetWidth - 8, Math.max(8, e.clientX - card.left + 12)) + 'px';
+            tip.style.top = Math.max(8, e.clientY - card.top - tip.offsetHeight - 10) + 'px';
+            h.classList.add('is-hover');
+        });
+        h.addEventListener('mouseleave', () => { tip.hidden = true; h.classList.remove('is-hover'); });
+    });
+}
+
+// One table renderer for all detail tabs (search, sort, totals row)
+function reportTableConfig() {
+    const sales = repNum(reportSummary?.totalSales);
+    const expTotal = (reportExpensesList || []).reduce((t, e) => t + repNum(e.amount), 0);
+    if (repTab === 'products') return {
+        rows: (reportProducts || []).map(r => ({ ...r, margin: repNum(r.total_sales) ? repNum(r.profit) / repNum(r.total_sales) : 0 })),
+        search: ['product_name', 'category_name'],
+        cols: [
+            { key: 'product_name', label: tr('col_name'), text: true },
+            { key: 'category_name', label: tr('col_category'), text: true },
+            { key: 'quantity_sold', label: tr('col_qty'), fmt: (v, r) => repQty(v) + (r.unit ? ' ' + escapeHtml(r.unit) : ''), total: true, totalFmt: repQty },
+            { key: 'unit_price', label: tr('rep_avg_price'), fmt: money },
+            { key: 'total_sales', label: tr('col_sales'), fmt: money, total: true },
+            { key: 'total_cost', label: tr('rep_cost_col'), fmt: money, total: true },
+            { key: 'profit', label: tr('col_profit'), fmt: v => `<span class="${repNum(v) < 0 ? 'rep-neg' : 'rep-pos'}">${money(v)}</span>`, total: true, totalFmt: money },
+            { key: 'margin', label: tr('rep_margin'), fmt: v => repPct(v) }
+        ],
+        defaultSort: 'total_sales'
+    };
+    if (repTab === 'categories') return {
+        rows: (reportCategories || []).map(r => ({ ...r, share: sales ? repNum(r.total_sales) / sales : 0 })),
+        search: ['category_name'],
+        cols: [
+            { key: 'category_name', label: tr('col_category'), text: true },
+            { key: 'quantity_sold', label: tr('col_qty'), fmt: repQty, total: true },
+            { key: 'total_sales', label: tr('col_sales'), fmt: money, total: true },
+            { key: 'profit', label: tr('col_profit'), fmt: money, total: true },
+            { key: 'share', label: tr('rep_share'), fmt: v => `<div class="rep-share"><span style="width:${Math.round(v * 100)}%"></span></div><span class="rep-share-txt">${repPct(v)}</span>` }
+        ],
+        defaultSort: 'total_sales'
+    };
+    if (repTab === 'expenses') {
+        const cat = document.getElementById('rep-exp-cat-filter')?.value || '';
+        const paid = document.getElementById('rep-exp-paid-filter')?.value || '';
+        return {
+            rows: (reportExpensesList || []).filter(e => (!cat || e.category === cat) && (!paid || (paid === 'paid') === (repNum(e.is_paid) === 1))),
+            search: ['category', 'supplier_name', 'description'],
+            cols: [
+                { key: 'expense_date', label: tr('col_date'), fmt: v => escapeHtml(toInputDate(v)), text: true },
+                { key: 'category', label: tr('col_category'), text: true },
+                { key: 'supplier_name', label: tr('rep_details'), text: true, fmt: (v, r) => escapeHtml(v || '—') + (repNum(r.liters) ? ` <small class="rep-muted">${repQty(r.liters)} L</small>` : '') },
+                { key: 'description', label: tr('col_desc'), text: true },
+                { key: 'amount', label: tr('col_amount'), fmt: money, total: true },
+                { key: 'is_paid', label: tr('col_status'), fmt: v => `<span class="badge ${repNum(v) === 1 ? 'in-stock' : 'low-stock'}">${tr(repNum(v) === 1 ? 'paid' : 'unpaid')}</span>` }
+            ],
+            defaultSort: 'expense_date'
+        };
+    }
+    // expense categories
+    return {
+        rows: (reportExpensesBreakdown?.categories || []).map(r => ({ ...r, share: expTotal ? repNum(r.total_amount) / expTotal : 0 })),
+        search: ['category'],
+        cols: [
+            { key: 'category', label: tr('col_category'), text: true },
+            { key: 'expense_count', label: tr('rep_count'), fmt: v => repNum(v).toLocaleString(), total: true, totalFmt: v => repNum(v).toLocaleString() },
+            { key: 'total_amount', label: tr('col_amount'), fmt: money, total: true },
+            { key: 'paid_amount', label: tr('paid'), fmt: money, total: true },
+            { key: 'unpaid_amount', label: tr('unpaid'), fmt: v => `<span class="${repNum(v) > 0 ? 'rep-warn' : ''}">${money(v)}</span>`, total: true, totalFmt: money },
+            { key: 'share', label: tr('rep_share'), fmt: v => `<div class="rep-share rep-share-exp"><span style="width:${Math.round(v * 100)}%"></span></div><span class="rep-share-txt">${repPct(v)}</span>` }
+        ],
+        defaultSort: 'total_amount'
+    };
+}
+
+function renderReportTable() {
+    const isMilk = repTab === 'milk';
+    document.getElementById('rep-table-wrap').hidden = isMilk;
+    document.getElementById('rep-milk-table-wrapper').hidden = !isMilk;
+    document.querySelector('.rep-tab-tools').hidden = isMilk;
+    document.querySelectorAll('.rep-tab').forEach(t => t.classList.toggle('active', t.dataset.repTab === repTab));
+    const showExpFilters = repTab === 'expenses';
+    document.getElementById('rep-exp-cat-filter').hidden = !showExpFilters;
+    document.getElementById('rep-exp-paid-filter').hidden = !showExpFilters;
+    if (isMilk) return;
+
+    if (showExpFilters) {
+        const sel = document.getElementById('rep-exp-cat-filter');
+        const keep = sel.value;
+        const cats = [...new Set((reportExpensesList || []).map(e => e.category).filter(Boolean))].sort();
+        sel.innerHTML = `<option value="">${escapeHtml(tr('rep_all_categories'))}</option>` + cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+        sel.value = cats.includes(keep) ? keep : '';
+    }
+
+    const cfg = reportTableConfig();
+    const q = (document.getElementById('rep-search')?.value || '').trim().toLowerCase();
+    let rows = cfg.rows.filter(r => !q || cfg.search.some(k => String(r[k] ?? '').toLowerCase().includes(q)));
+    const key = repSort.key && cfg.cols.some(c => c.key === repSort.key) ? repSort.key : cfg.defaultSort;
+    const col = cfg.cols.find(c => c.key === key);
+    rows = [...rows].sort((a, b) => {
+        const va = a[key], vb = b[key];
+        const cmp = col?.text ? String(va ?? '').localeCompare(String(vb ?? '')) : repNum(va) - repNum(vb);
+        return cmp * (repSort.key === key ? repSort.dir : (col?.text && key !== 'expense_date' ? 1 : -1));
+    });
+
+    document.getElementById('rep-thead').innerHTML = `<tr>${cfg.cols.map(c => {
+        const active = c.key === key;
+        const arrow = active ? (rows.length && (repSort.key === key ? repSort.dir : (c.text && key !== 'expense_date' ? 1 : -1)) > 0 ? '▲' : '▼') : '';
+        return `<th class="${c.text ? 'rep-text' : 'rep-num'} ${active ? 'is-sorted' : ''}" data-sort="${c.key}">${escapeHtml(c.label)} <span class="rep-arrow">${arrow}</span></th>`;
+    }).join('')}</tr>`;
+    document.getElementById('rep-tbody').innerHTML = rows.length
+        ? rows.map(r => `<tr>${cfg.cols.map(c => `<td class="${c.text ? 'rep-text' : 'rep-num'}">${c.fmt ? c.fmt(r[c.key], r) : escapeHtml(r[c.key] ?? '')}</td>`).join('')}</tr>`).join('')
+        : `<tr><td colspan="${cfg.cols.length}" class="empty-state">${escapeHtml(tr('rep_nothing'))}</td></tr>`;
+    document.getElementById('rep-tfoot').innerHTML = rows.length ? `<tr>${cfg.cols.map((c, i) => {
+        if (i === 0) return `<td class="rep-text">${escapeHtml(tr('rep_total_row'))} (${rows.length})</td>`;
+        if (!c.total) return '<td></td>';
+        const sum = rows.reduce((t, r) => t + repNum(r[c.key]), 0);
+        return `<td class="rep-num">${(c.totalFmt || c.fmt || String)(sum, {})}</td>`;
+    }).join('')}</tr>` : '';
+    document.querySelectorAll('#rep-thead [data-sort]').forEach(th => th.onclick = () => {
+        const k = th.dataset.sort;
+        const c = cfg.cols.find(x => x.key === k);
+        repSort = { key: k, dir: repSort.key === k ? -repSort.dir : (c?.text && k !== 'expense_date' ? 1 : -1) };
+        renderReportTable();
+    });
+}
+
+function renderReportMilk() {
     const milkRows = reportExpensesBreakdown?.milkSuppliers || [];
     const milkTbody = document.getElementById('report-milk-body');
-    if (milkTbody) {
-        milkTbody.innerHTML = milkRows.length ? milkRows.map(m => `
-            <tr>
-                <td><strong>${escapeHtml(m.supplier_name || tr('unassigned'))}</strong></td>
-                <td>${m.delivery_count ?? 0}</td>
-                <td><strong>${Number(m.total_liters ?? 0).toLocaleString()} L</strong></td>
-                <td>${money(m.avg_unit_price ?? 0)}</td>
-                <td><strong>${money(m.total_amount ?? 0)}</strong></td>
-                <td style="color:#16a34a; font-weight:600;">${money(m.total_paid ?? 0)}</td>
-                <td style="color:${Number(m.total_unpaid || 0) > 0 ? '#ea580c; font-weight:700;' : 'inherit;'}">${money(m.total_unpaid ?? 0)}</td>
-                <td>
-                    <button type="button" class="btn btn-secondary btn-sm" data-rep-statement="${m.supplier_id}">
-                        <span class="material-symbols-rounded" style="font-size:16px;">receipt_long</span>
-                        ${tr('print_statement')}
-                    </button>
-                </td>
-            </tr>
-        `).join('') : `<tr><td colspan="8" class="empty-state">${tr('empty_list')}</td></tr>`;
+    if (!milkTbody) return;
+    milkTbody.innerHTML = milkRows.length ? milkRows.map(m => `
+        <tr>
+            <td><strong>${escapeHtml(m.supplier_name || tr('unassigned'))}</strong></td>
+            <td>${m.delivery_count ?? 0}</td>
+            <td><strong>${Number(m.total_liters ?? 0).toLocaleString()} L</strong></td>
+            <td>${money(m.avg_unit_price ?? 0)}</td>
+            <td><strong>${money(m.total_amount ?? 0)}</strong></td>
+            <td class="rep-pos">${money(m.total_paid ?? 0)}</td>
+            <td class="${Number(m.total_unpaid || 0) > 0 ? 'rep-warn' : ''}">${money(m.total_unpaid ?? 0)}</td>
+            <td><button type="button" class="btn btn-secondary btn-sm" data-rep-statement="${m.supplier_id}">
+                <span class="material-symbols-rounded" style="font-size:16px;">receipt_long</span> ${tr('print_statement')}</button></td>
+        </tr>`).join('') : `<tr><td colspan="8" class="empty-state">${escapeHtml(tr('rep_nothing'))}</td></tr>`;
+    milkTbody.querySelectorAll('[data-rep-statement]').forEach(btn => {
+        btn.onclick = () => openMilkStatement(Number(btn.dataset.repStatement) || null,
+            document.getElementById('report-from')?.value || '', document.getElementById('report-to')?.value || '');
+    });
+}
 
-        milkTbody.querySelectorAll('[data-rep-statement]').forEach(btn => {
-            btn.onclick = () => {
-                const suppId = Number(btn.dataset.repStatement) || null;
-                const from = document.getElementById('report-from')?.value || '';
-                const to = document.getElementById('report-to')?.value || '';
-                openMilkStatement(suppId, from, to);
-            };
-        });
-    }
-
-    // Render Expense Categories Breakdown
-    const catRows = reportExpensesBreakdown?.categories || [];
-    const catTbody = document.getElementById('report-cats-body');
-    if (catTbody) {
-        catTbody.innerHTML = catRows.length ? catRows.map(c => `
-            <tr>
-                <td><strong>${escapeHtml(c.category)}</strong></td>
-                <td>${c.expense_count ?? 0}</td>
-                <td><strong>${money(c.total_amount ?? 0)}</strong></td>
-                <td style="color:#16a34a; font-weight:600;">${money(c.paid_amount ?? 0)}</td>
-                <td style="color:${Number(c.unpaid_amount || 0) > 0 ? '#ea580c; font-weight:700;' : 'inherit;'}">${money(c.unpaid_amount ?? 0)}</td>
-            </tr>
-        `).join('') : `<tr><td colspan="5" class="empty-state">${tr('empty_list')}</td></tr>`;
-    }
+function setupReportDetails() {
+    document.querySelectorAll('.rep-tab').forEach(t => t.addEventListener('click', () => {
+        repTab = t.dataset.repTab;
+        repSort = { key: null, dir: -1 };
+        renderReportTable();
+    }));
+    document.getElementById('rep-search')?.addEventListener('input', renderReportTable);
+    document.getElementById('rep-exp-cat-filter')?.addEventListener('change', renderReportTable);
+    document.getElementById('rep-exp-paid-filter')?.addEventListener('change', renderReportTable);
+    document.getElementById('btn-print-report')?.addEventListener('click', () => {
+        document.body.classList.add('printing-report');
+        window.print();
+        setTimeout(() => document.body.classList.remove('printing-report'), 500);
+    });
 }
 
 function updateShippingButton() {
@@ -2530,6 +2827,15 @@ function populatePosCurrency() {
     if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
     else sel.value = list[0]?.code || list[0]?.Code || 'USD';
     if (!sel.value) sel.value = 'USD';
+
+    // Scale panel has its own currency (starts on the POS currency)
+    const scaleSel = document.getElementById('scaleCurrency');
+    if (scaleSel) {
+        const keep = scaleSel.value;
+        scaleSel.innerHTML = sel.innerHTML;
+        scaleSel.value = [...scaleSel.options].some(o => o.value === keep) ? keep : sel.value;
+        try { scaleManager.renderSelected(); scaleManager.renderCalc(); } catch { /* scale not ready yet */ }
+    }
 }
 
 function normalizeScanCode(code) {
@@ -2604,7 +2910,7 @@ async function tryPosScanAdd(codeOverride) {
     if (!isPosProductAvailable(p)) {
         if (input) input.value = '';
         renderPOS();
-        await showOutOfStockPopup(p.name);
+        toastOutOfStock(p.name);
         input?.focus();
         return;
     }
@@ -2715,7 +3021,10 @@ function renderCart() {
                 const delta = isWeight ? (d > 0 ? 0.1 : -0.1) : d;
                 cart[i].qty = Math.max(0, Number((cart[i].qty + delta).toFixed(3)));
                 if (cart[i].qty <= 0) cart.splice(i, 1);
-                else if (cart[i].qty > cart[i].max) cart[i].qty = cart[i].max;
+                else if (cart[i].qty > cart[i].max) {
+                    cart[i].qty = cart[i].max;
+                    if (!isWeight) toastMaxStock(cart[i].name, cart[i].max, false); // weight lines are stock-checked when added
+                }
                 renderCart();
             };
         });
@@ -2725,6 +3034,10 @@ function renderCart() {
                 if (!cart[i]) return;
                 const next = parseFloat(inp.value);
                 if (!Number.isFinite(next) || next <= 0) { inp.value = String(cart[i].qty); return; }
+                if (next > cart[i].max) {
+                    const isWeight = cart[i].weighted || isSellByWeight(cart[i]);
+                    if (!isWeight) toastMaxStock(cart[i].name, cart[i].max, false); // weight lines are stock-checked when added
+                }
                 cart[i].qty = Math.min(cart[i].max, next);
                 renderCart();
             };
@@ -2768,6 +3081,9 @@ function updatePosTotalsUi() {
     const discWrap = document.getElementById('pos-disc-wrap');
     if (shipWrap) shipWrap.hidden = !t.shipOn;
     if (discWrap) discWrap.hidden = !t.discOn;
+    // Amount rows only take space when their option is switched on
+    [['pos-row-vat', t.vatOn], ['pos-row-ship', t.shipOn], ['pos-row-disc', t.discOn]]
+        .forEach(([id, on]) => { const r = document.getElementById(id); if (r) r.hidden = !on; });
     const set = (id, v) => { const n = document.getElementById(id); if (n) n.textContent = posMoney(v); };
     set('cart-subtotal', t.sub);
     set('cart-vat', t.vat);
@@ -2790,8 +3106,27 @@ function clearPosTotalManual() {
     posTotalManual = null;
 }
 
+let salesRange = null; // sales for the date range picked on the Sales page (null = not loaded yet)
+
+async function loadSalesRange() {
+    const preset = document.getElementById('sales-preset')?.value || 'Monthly';
+    const fromEl = document.getElementById('sales-from');
+    const toEl = document.getElementById('sales-to');
+    syncDateRangeInputs(preset, fromEl, toEl);
+    const qs = new URLSearchParams();
+    if (fromEl?.value && toEl?.value) { qs.set('from', fromEl.value); qs.set('to', toEl.value); }
+    try { salesRange = await api('/api/recent-sales?' + qs.toString()); }
+    catch (err) { toast(err.message, 'error'); }
+}
+
 function renderSales() {
-    document.getElementById('sales-body').innerHTML = sales.length ? sales.map(o => {
+    const list = salesRange || sales;
+    const summary = document.getElementById('sales-range-summary');
+    if (summary) {
+        const total = list.reduce((t, o) => t + (Number(o.total) || 0), 0);
+        summary.textContent = `${list.length} ${tr('sales_orders_count')} · ${tr('col_total')}: ${money(total)}`;
+    }
+    document.getElementById('sales-body').innerHTML = list.length ? list.map(o => {
         const isPaid = String(o.paymentStatus || 'Paid').toLowerCase() === 'paid';
         return `<tr><td>#${o.orderId}</td><td>${formatDate(o.date)}</td><td>${escapeHtml(o.customer)}</td>
         <td>${money(o.total)}</td>
@@ -3257,6 +3592,27 @@ async function settleSelectedDeliverer() {
     }
 }
 
+// Update paid/unpaid on the server, then reflect it in the row right away (don't wait for the full reload).
+async function setExpensePaid(el, id, paid) {
+    if (el.dataset.busy) return;
+    el.dataset.busy = '1';
+    if ('disabled' in el) el.disabled = true;
+    try {
+        const res = await api('/api/expenses/' + id + (paid ? '/pay' : '/unpay'), { method: 'POST' });
+        if (res && res.success === false) throw new Error(res.error || 'Update failed');
+        const exp = expenses.find(x => Number(x.expenseId) === id);
+        if (exp) exp.isPaid = paid;
+        renderExpenses();
+        toast(tr('saved_ok'), 'success');
+        loadData().catch(() => { /* list already updated locally */ });
+    } catch (e) {
+        toast(e.message, 'error');
+    } finally {
+        delete el.dataset.busy;
+        if ('disabled' in el) el.disabled = false;
+    }
+}
+
 function renderExpenses() {
     // Populate deliverers dropdown in filter if needed
     const suppSel = document.getElementById('exp-filter-supplier');
@@ -3389,32 +3745,18 @@ function renderExpenses() {
         }).join('') : `<tr><td colspan="7" class="empty-state">${tr('empty_list')}</td></tr>`;
 
         tbody.querySelectorAll('[data-pay]').forEach(btn => {
-            btn.onclick = async () => {
-                try {
-                    await api('/api/expenses/' + btn.dataset.pay + '/pay', { method: 'POST' });
-                    toast(tr('saved_ok'), 'success');
-                    await loadData();
-                } catch (e) { toast(e.message, 'error'); }
-            };
+            btn.onclick = () => setExpensePaid(btn, Number(btn.dataset.pay), true);
         });
 
         tbody.querySelectorAll('[data-unpay]').forEach(btn => {
-            btn.onclick = async () => {
-                try {
-                    await api('/api/expenses/' + btn.dataset.unpay + '/unpay', { method: 'POST' });
-                    toast(tr('saved_ok'), 'success');
-                    await loadData();
-                } catch (e) { toast(e.message, 'error'); }
-            };
+            btn.onclick = () => setExpensePaid(btn, Number(btn.dataset.unpay), false);
         });
 
         tbody.querySelectorAll('[data-toggle-expense]').forEach(el => {
-            el.onclick = async () => {
-                try {
-                    await api('/api/expenses/' + el.dataset.toggleExpense + '/toggle-paid', { method: 'POST' });
-                    toast(tr('saved_ok'), 'success');
-                    await loadData();
-                } catch (e) { toast(e.message, 'error'); }
+            el.onclick = () => {
+                const id = Number(el.dataset.toggleExpense);
+                const exp = expenses.find(x => Number(x.expenseId) === id);
+                setExpensePaid(el, id, !(exp && exp.isPaid));
             };
         });
 
@@ -4172,59 +4514,6 @@ function isPosProductAvailable(p) {
     return (Number(p.stock) || 0) > 0;
 }
 
-async function showOutOfStockPopup(productName, options = {}) {
-    const allowSellAnyway = options.allowSellAnyway !== false;
-    if (!allowSellAnyway) {
-        await confirmDialog(
-            tr('pos_out_of_stock_msg').replace('{0}', productName || ''),
-            {
-                title: tr('pos_out_of_stock_title'),
-                confirmText: tr('ok'),
-                danger: false,
-                hideCancel: true,
-            }
-        );
-        return false;
-    }
-    return confirmDialog(
-        tr('pos_out_of_stock_msg').replace('{0}', productName || ''),
-        {
-            title: tr('pos_out_of_stock_title'),
-            confirmText: tr('pos_sell_anyway'),
-            cancelText: tr('cancel'),
-            danger: false,
-            hideCancel: false,
-        }
-    );
-}
-
-async function showOutOfStockWeightPopup(productName, requestedKg, availableKg, options = {}) {
-    const allowSellAnyway = options.allowSellAnyway !== false;
-    const req = Number(requestedKg || 0).toFixed(3);
-    const avail = Math.max(0, Number(availableKg || 0)).toFixed(3);
-    const msg = tr('pos_insufficient_weight_msg')
-        .replace('{0}', productName || '')
-        .replace('{1}', req)
-        .replace('{2}', avail);
-
-    if (!allowSellAnyway) {
-        await confirmDialog(msg, {
-            title: tr('pos_insufficient_stock_title') || tr('pos_out_of_stock_title'),
-            confirmText: tr('ok'),
-            danger: false,
-            hideCancel: true,
-        });
-        return false;
-    }
-    return confirmDialog(msg, {
-        title: tr('pos_insufficient_stock_title') || tr('pos_out_of_stock_title'),
-        confirmText: tr('pos_sell_anyway'),
-        cancelText: tr('cancel'),
-        danger: false,
-        hideCancel: false,
-    });
-}
-
 function fillQuickSaleProductList(filter = '') {
     const sel = document.getElementById('qs-product');
     if (!sel) return;
@@ -4421,7 +4710,10 @@ function getSellByValue() {
     return sel ? sel.value : 'piece';
 }
 
-const DEFAULT_PIECE_UOMS = ['pcs', 'box', 'pack', 'meter', 'liter', 'g'];
+const DEFAULT_PIECE_UOMS = ['pcs', 'box', 'pack', 'meter', 'liter'];
+// Weight units belong to "By weight" products only, never to fixed-price ones
+const WEIGHT_UOMS = new Set(['g', 'gram', 'grams', 'kg', 'kilo', 'kilos', 'kilogram', 'kilograms', 'lb', 'lbs', 'oz']);
+const isWeightUom = (u) => WEIGHT_UOMS.has(String(u || '').trim().toLowerCase());
 let cachedUoms = [...DEFAULT_PIECE_UOMS];
 
 async function loadUoms() {
@@ -4441,7 +4733,7 @@ function getPieceUomOptions() {
     const extras = [];
     for (const u of cachedUoms) {
         const key = String(u || '').trim();
-        if (!key || key.toLowerCase() === 'kg') continue;
+        if (!key || isWeightUom(key)) continue;
         if (set.has(key.toLowerCase())) continue;
         set.add(key.toLowerCase());
         extras.push(key);
@@ -4449,7 +4741,7 @@ function getPieceUomOptions() {
     // Also include units already used on loaded products
     for (const p of (products || [])) {
         const key = String(p?.uom || '').trim();
-        if (!key || key.toLowerCase() === 'kg') continue;
+        if (!key || isWeightUom(key)) continue;
         if (set.has(key.toLowerCase())) continue;
         set.add(key.toLowerCase());
         extras.push(key);
@@ -4471,7 +4763,7 @@ function setProductUomOptions(byWeight, preferred) {
         if (addBtn) addBtn.hidden = true;
     } else {
         let opts = getPieceUomOptions();
-        const prevKey = String(prev || '').trim();
+        const prevKey = isWeightUom(prev) ? '' : String(prev || '').trim(); // coming from "By weight": start on pcs
         if (prevKey && !opts.some(o => o.value.toLowerCase() === prevKey.toLowerCase())) {
             opts = [...opts, { value: prevKey, label: prevKey }];
         }
@@ -6582,6 +6874,8 @@ async function navigateTo(target, updateHash = true) {
         requestHostPrinters();
     }
     if (target === 'barcodes') renderBarcodes();
+    if (target === 'sales') { await loadSalesRange(); renderSales(); }
+    if (target === 'milk-processing') await loadMilkProcessing();
     if (target === 'pos') {
         setTimeout(() => document.getElementById('pos-search')?.focus(), 50);
     }
@@ -6628,6 +6922,7 @@ function setupAuth() {
 }
 
 function setupActions() {
+    try { setupMilkProcessing(); } catch (e) { console.error('setupMilkProcessing', e); }
     const btnLang = document.getElementById('btn-lang');
     if (btnLang) btnLang.onclick = () => toggleLanguage();
     document.getElementById('btn-settings-lang')?.addEventListener('click', () => toggleLanguage());
@@ -7326,6 +7621,15 @@ function setupActions() {
         renderReports();
     };
     document.getElementById('report-from')?.addEventListener('change', onReportDates);
+    document.getElementById('sales-preset')?.addEventListener('change', async () => { await loadSalesRange(); renderSales(); });
+    const onSalesDates = async () => {
+        const preset = document.getElementById('sales-preset');
+        if (preset && preset.value !== 'Custom') preset.value = 'Custom';
+        await loadSalesRange();
+        renderSales();
+    };
+    document.getElementById('sales-from')?.addEventListener('change', onSalesDates);
+    document.getElementById('sales-to')?.addEventListener('change', onSalesDates);
     document.getElementById('report-to')?.addEventListener('change', onReportDates);
     document.getElementById('history-kind').onchange = async () => { await loadHistory(); renderHistory(); };
     document.getElementById('btn-print-barcodes').onclick = () => openBarcodePrintPreview();
@@ -7418,7 +7722,7 @@ function setupActions() {
 
     document.getElementById('btn-refresh-dashboard')?.addEventListener('click', () => refreshWithToast());
     document.getElementById('btn-refresh-inventory')?.addEventListener('click', () => refreshWithToast());
-    document.getElementById('btn-refresh-sales')?.addEventListener('click', () => refreshWithToast());
+    document.getElementById('btn-refresh-sales')?.addEventListener('click', async () => { await refreshWithToast(); await loadSalesRange(); renderSales(); });
     document.getElementById('btn-refresh-reports')?.addEventListener('click', () => refreshWithToast(async () => { await loadReports(); renderReports(); }));
     document.getElementById('btn-refresh-history')?.addEventListener('click', () => refreshWithToast(async () => { await loadHistory(); renderHistory(); }));
     document.getElementById('btn-refresh-quotations')?.addEventListener('click', () => refreshWithToast());
@@ -7985,6 +8289,9 @@ const scaleManager = {
     manualMode: false,
 
     async init() {
+        // applyFeatureFlags() runs on every flags refresh; wire listeners only once
+        if (this._inited) return;
+        this._inited = true;
         const toggleSettings = (e) => {
             if (e) { e.preventDefault(); e.stopPropagation(); }
             const settings = document.getElementById('scaleSettings');
@@ -8024,6 +8331,19 @@ const scaleManager = {
                 }
             });
         }
+        const priceInp = document.getElementById('scaleCalcPrice');
+        if (priceInp) {
+            priceInp.addEventListener('input', () => this.onPriceInput());
+            priceInp.addEventListener('focus', () => priceInp.select());
+            priceInp.addEventListener('blur', () => this.renderCalc());
+            priceInp.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') { e.preventDefault(); this.addWeighedProduct(); }
+            });
+        }
+        document.getElementById('scaleCurrency')?.addEventListener('change', () => {
+            this.renderSelected();
+            this.renderCalc();
+        });
         await this.refreshPorts();
         await this.refreshStatus();
         this.renderSelected();
@@ -8122,6 +8442,51 @@ const scaleManager = {
             source: 'manual'
         };
         this.renderCalc(weightKg, true);
+    },
+
+    scaleCurrency() {
+        return currencyMetaFor(document.getElementById('scaleCurrency')?.value || document.getElementById('pos-currency')?.value);
+    },
+
+    // USD-base amount shown in the scale currency (plain number for the input box)
+    formatScaleAmount(usd, withSymbol = false) {
+        const { code, rate, symbol } = this.scaleCurrency();
+        const v = (Number(usd) || 0) * rate;
+        const txt = code === 'LBP' ? String(Math.round(v)) : v.toFixed(2);
+        if (!withSymbol) return txt;
+        const pretty = code === 'LBP' ? Math.round(v).toLocaleString('en-US') : v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        return code === 'LBP' ? `${symbol} ${pretty}` : `${symbol}${pretty}`;
+    },
+
+    // Typed price (scale currency) -> weight in grams, keeping the exact price for the cart line
+    onPriceInput() {
+        const product = this.getSelectedProduct();
+        const amount = parsePosDisplayAmount(document.getElementById('scaleCalcPrice')?.value);
+        if (!product) {
+            toast(tr('weigh_need_product'), 'error');
+            return;
+        }
+        const unitPrice = Number(product.price) || 0;
+        if (!(amount > 0) || !(unitPrice > 0)) {
+            this.pending = null;
+            this.setManualWeight(0);
+            this.updateManualHint();
+            return;
+        }
+        const { rate } = this.scaleCurrency();
+        const baseUsd = amount / (rate > 0 ? rate : 1);
+        const grams = Math.max(1, Math.round(baseUsd / unitPrice * 1000));
+        this.manualMode = true;
+        this.setManualWeight(grams / 1000);
+        this.pending = {
+            productId: product.id,
+            weightKg: grams / 1000,
+            linePrice: baseUsd,
+            fixedPrice: true,
+            source: 'price'
+        };
+        this.updateManualHint();
+        document.getElementById('scaleCalcPrice')?.classList.add('is-ready');
     },
 
     commitPendingFromWeight(weightKg, source = 'scale') {
@@ -8259,21 +8624,25 @@ const scaleManager = {
             info.style.display = 'flex';
         }
         if (nameEl) nameEl.textContent = p.name;
-        if (rateEl) rateEl.textContent = `${tr('scale_selected')}: ${formatPosPrice(p)}`;
+        if (rateEl) rateEl.textContent = `${tr('scale_selected')}: ${this.formatScaleAmount(p.price, true)}${tr('per_kg')}`;
     },
 
     renderCalc(weightKg, locked = false) {
         const calcEl = document.getElementById('scaleCalcPrice');
         const p = this.getSelectedProduct();
         if (!calcEl) return;
+        const symEl = document.getElementById('scaleCurSym');
+        if (symEl) symEl.textContent = this.scaleCurrency().symbol;
+        if (document.activeElement === calcEl && this.pending?.fixedPrice) return; // user is typing a price
         if (!p) {
-            calcEl.textContent = money(0);
+            calcEl.value = this.formatScaleAmount(0);
             calcEl.classList.remove('is-ready');
             return;
         }
         const w = weightKg != null ? weightKg : (this.pending?.weightKg ?? this.getManualWeight());
-        const price = this.calcLinePrice(p, Math.max(0, w));
-        calcEl.textContent = money(price);
+        const fixed = this.pending?.fixedPrice && this.pending.productId === p.id && Math.abs(this.pending.weightKg - w) < 0.0005;
+        const price = fixed ? this.pending.linePrice : this.calcLinePrice(p, Math.max(0, w));
+        calcEl.value = this.formatScaleAmount(price);
         calcEl.classList.toggle('is-ready', locked || (this.pending && this.pending.productId === p.id && w > 0));
     },
 
@@ -8436,27 +8805,28 @@ const scaleManager = {
             .filter(x => x.id === product.id && !x.skipStock)
             .reduce((sum, x) => sum + (x.stockQty != null ? Number(x.stockQty) : Math.round((Number(x.weightKg) || Number(x.qty) || 0) * 1000)), 0);
 
-        let skipStock = !isPosProductAvailable(product);
+        const skipStock = false; // selling beyond stock is not allowed
 
-        if (product.isStockTracked !== false && !product.isService && product.itemType !== 'Service' && !skipStock) {
+        if (product.isStockTracked !== false && !product.isService && product.itemType !== 'Service') {
             const remainingGrams = Math.max(0, availableStockGrams - inCartStockGrams);
+            if (remainingGrams <= 0) {
+                toastOutOfStock(product.name);
+                return;
+            }
             if (requestedStockGrams > remainingGrams) {
-                const reqKg = weight.toFixed(3);
-                const availKg = (remainingGrams / 1000).toFixed(3);
-                const confirmed = await showOutOfStockWeightPopup(product.name, reqKg, availKg);
-                if (!confirmed) {
-                    const input = document.getElementById('scaleManualWeight');
-                    if (input) {
-                        input.focus();
-                        input.select();
-                    }
-                    return;
-                }
-                skipStock = true;
+                // Cap at what's left and let the cashier confirm with another Add to cart
+                toast(tr('pos_not_enough_weight').replace('{0}', product.name).replace('{1}', (remainingGrams / 1000).toFixed(3)), 'error');
+                this.setManualWeight(remainingGrams / 1000);
+                this.onManualWeightInput();
+                this.updateManualHint();
+                const input = document.getElementById('scaleManualWeight');
+                if (input) { input.focus(); input.select(); }
+                return;
             }
         }
 
-        const linePrice = this.calcLinePrice(product, weight);
+        const fromPrice = this.pending?.fixedPrice && this.pending.productId === product.id && Math.abs(this.pending.weightKg - weight) < 0.0005;
+        const linePrice = fromPrice ? this.pending.linePrice : this.calcLinePrice(product, weight);
         const stockQty = skipStock ? 0 : requestedStockGrams;
         const ok = addToCart(product.id, 1, {
             name: `${product.name} (${weight.toFixed(3)} ${tr('unit_kg')})`,
@@ -8471,8 +8841,7 @@ const scaleManager = {
         });
         if (ok === false) return;
         toast(tr('weigh_added').replace('{0}', product.name).replace('{1}', weight.toFixed(3)), 'success');
-        this.pending = null;
-        this.setManualWeight(0);
+        this.clearSelectedProduct(); // product leaves the scale once it's in the cart
         this.render();
         renderCart();
     },
@@ -8529,6 +8898,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         setupAuth();
         try { setupActions(); } catch (e) { console.error('setupActions', e); }
         try { setupTools(); } catch (e) { console.error('setupTools', e); }
+        try { setupAppZoom(); } catch (e) { console.error('setupAppZoom', e); }
+        try { setupNavOrder(); } catch (e) { console.error('setupNavOrder', e); }
+        try { setupReportDetails(); } catch (e) { console.error('setupReportDetails', e); }
         try { setupSignalR(); } catch (e) { console.error('setupSignalR', e); }
         try { wirePrintSettingsUi(); } catch (e) { console.error('wirePrintSettingsUi', e); }
         try { await loadPrintSettings(); } catch { /* ignore */ }
@@ -8604,16 +8976,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('boot failed', e);
         toast('UI failed to start: ' + e.message, 'error');
     } finally {
-        // Paint one frame with styles applied, then reveal (host hides splash)
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                document.body.classList.add('ui-ready');
-                try {
-                    if (window.chrome?.webview?.postMessage)
-                        window.chrome.webview.postMessage(JSON.stringify({ action: 'uiReady' }));
-                } catch { }
-            });
-        });
+        // Paint one frame with styles applied, then reveal (host hides splash).
+        // setTimeout backup: animation frames don't run while the window is hidden/minimised.
+        let uiReadySent = false;
+        const sendUiReady = () => {
+            if (uiReadySent) return;
+            uiReadySent = true;
+            document.body.classList.add('ui-ready');
+            try {
+                if (window.chrome?.webview?.postMessage)
+                    window.chrome.webview.postMessage(JSON.stringify({ action: 'uiReady' }));
+            } catch { }
+        };
+        requestAnimationFrame(() => requestAnimationFrame(sendUiReady));
+        setTimeout(sendUiReady, 300);
     }
 });
 
@@ -8621,3 +8997,343 @@ window.showApp = showApp;
 window.hideApp = hideApp;
 window.loadData = loadData;
 window.applyI18n = applyI18n;
+
+/* ---------- Milk Processing (raw milk -> cheese, labneh, laban...) ---------- */
+let milkIntakes = [], milkProductions = [], milkProducts = [], milkSelectedIntake = null;
+
+const milkNum = (n) => (Number(n) || 0).toLocaleString(undefined, { maximumFractionDigits: 2 });
+const milkDate = (d) => String(d ?? '').replace('T', ' ').slice(0, 16);
+
+async function loadMilkProcessing() {
+    const all = document.getElementById('milk-show-finished')?.checked ? '1' : '0';
+    try {
+        [milkIntakes, milkProductions, milkProducts] = await Promise.all([
+            api('/api/milk/intakes?all=' + all),
+            api('/api/milk/productions'),
+            api('/api/milk/products')
+        ]);
+    } catch (err) {
+        toast(err.message, 'error');
+        return;
+    }
+    renderMilkProcessing();
+}
+
+function renderMilkProcessing() {
+    const received = milkIntakes.reduce((t, i) => t + (Number(i.liters) || 0), 0);
+    const used = milkIntakes.reduce((t, i) => t + (Number(i.used) || 0), 0);
+    const remaining = milkIntakes.reduce((t, i) => t + Math.max(0, Number(i.remaining) || 0), 0);
+    const stats = document.getElementById('milk-stats');
+    if (stats) {
+        stats.innerHTML = [
+            { label: tr('milk_raw_stock'), value: milkNum(remaining) + ' L', cls: 'stat-milk' },
+            { label: tr('milk_total_received'), value: milkNum(received) + ' L', cls: '' },
+            { label: tr('milk_total_used'), value: milkNum(used) + ' L', cls: '' }
+        ].map(c => `
+            <div class="stat-card ${c.cls}">
+                <div class="label">${escapeHtml(c.label)}</div>
+                <div class="value">${c.value}</div>
+            </div>`).join('');
+    }
+
+    const intakeBody = document.getElementById('milk-intakes-body');
+    if (intakeBody) {
+        intakeBody.innerHTML = milkIntakes.length ? milkIntakes.map(i => {
+            const left = Number(i.remaining) || 0;
+            return `<tr>
+                <td>${escapeHtml(milkDate(i.expense_date))}</td>
+                <td><strong>${escapeHtml(i.supplier_name || tr('unassigned'))}</strong></td>
+                <td>${escapeHtml(i.milk_type || '')}</td>
+                <td>${milkNum(i.liters)}</td>
+                <td>${milkNum(i.used)}</td>
+                <td><strong>${milkNum(left)}</strong></td>
+                <td>${left > 0.0001 ? `<button class="btn btn-primary btn-sm" data-milk-process="${i.expense_id}">
+                    <span class="material-symbols-rounded">factory</span><span>${escapeHtml(tr('milk_process_btn'))}</span></button>` : ''}</td>
+            </tr>`;
+        }).join('') : `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);">${escapeHtml(tr('milk_no_intakes'))}</td></tr>`;
+    }
+
+    const prodBody = document.getElementById('milk-productions-body');
+    if (prodBody) {
+        prodBody.innerHTML = milkProductions.length ? milkProductions.map(p => `<tr>
+                <td>${escapeHtml(milkDate(p.production_date))}</td>
+                <td>${escapeHtml(p.supplier_name || '')}</td>
+                <td><strong>${escapeHtml(p.part_name || '')}</strong></td>
+                <td>${milkNum(p.liters_used)}</td>
+                <td>${milkNum(p.quantity_made)} ${escapeHtml(p.unit || '')}</td>
+                <td>${escapeHtml(p.notes || '')}</td>
+                <td><button class="btn btn-secondary btn-sm" data-milk-delete="${p.production_id}" title="${escapeHtml(tr('delete'))}">
+                    <span class="material-symbols-rounded">delete</span></button></td>
+            </tr>`).join('') : `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);">${escapeHtml(tr('milk_no_productions'))}</td></tr>`;
+    }
+}
+
+function openMilkProductionModal(expenseId) {
+    milkSelectedIntake = milkIntakes.find(i => Number(i.expense_id) === Number(expenseId));
+    if (!milkSelectedIntake) return;
+    document.getElementById('milk-production-form').reset();
+    const left = Number(milkSelectedIntake.remaining) || 0;
+    document.getElementById('mp-intake-info').textContent =
+        `${tr('milk_from')}: ${milkSelectedIntake.supplier_name || tr('unassigned')} • ${milkDate(milkSelectedIntake.expense_date)} • ${milkNum(left)} ${tr('milk_left')}`;
+    document.getElementById('mp-product').value = '';
+    document.getElementById('mp-search').value = '';
+    fillMilkCategorySelect();
+    renderMilkProductList();
+    const newBtn = document.getElementById('btn-mp-new-item');
+    if (newBtn) newBtn.style.display = can('admin') ? '' : 'none';
+    const liters = document.getElementById('mp-liters');
+    liters.max = left;
+    liters.value = left;
+    document.getElementById('mp-unit').textContent = '';
+    openModal('milk-production-modal');
+    setTimeout(() => document.getElementById('mp-search')?.focus(), 50);
+}
+
+function fillMilkCategorySelect() {
+    const sel = document.getElementById('mp-category');
+    if (!sel) return;
+    const keep = sel.value;
+    const cats = [...new Set(milkProducts.map(p => p.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+    sel.innerHTML = `<option value="">${escapeHtml(tr('milk_all_categories'))}</option>` +
+        cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+    if (cats.includes(keep)) sel.value = keep;
+}
+
+function renderMilkProductList() {
+    const list = document.getElementById('mp-product-list');
+    if (!list) return;
+    const q = (document.getElementById('mp-search')?.value || '').trim().toLowerCase();
+    const cat = document.getElementById('mp-category')?.value || '';
+    const selectedId = document.getElementById('mp-product').value;
+    const rows = milkProducts.filter(p =>
+        (!cat || p.category === cat) &&
+        (!q || [p.part_name, p.barcode, p.part_number, p.category].some(v => String(v || '').toLowerCase().includes(q))));
+    list.innerHTML = rows.length ? rows.map(p => `
+        <div class="mp-product-item ${String(p.id) === selectedId ? 'selected' : ''}" data-mp-pick="${p.id}">
+            <span class="mp-name">${escapeHtml(p.part_name)}</span>
+            <span class="mp-meta">${escapeHtml(p.category || '')}${p.unit ? ' • ' + escapeHtml(p.unit) : ''}</span>
+        </div>`).join('') : `<div class="mp-product-empty">${escapeHtml(tr('milk_no_match'))}</div>`;
+    list.querySelector('.mp-product-item.selected')?.scrollIntoView({ block: 'nearest' });
+}
+
+function pickMilkProduct(id) {
+    const p = milkProducts.find(x => String(x.id) === String(id));
+    if (!p) return;
+    document.getElementById('mp-product').value = p.id;
+    document.getElementById('mp-unit').textContent = p.unit ? `(${p.unit})` : '';
+    renderMilkProductList();
+    document.getElementById('mp-made')?.focus();
+}
+
+// Barcode scanners type the code and press Enter: pick an exact barcode/SKU match, else the only match.
+function milkSearchEnter() {
+    const q = (document.getElementById('mp-search')?.value || '').trim().toLowerCase();
+    if (!q) return;
+    const exact = milkProducts.find(p => [p.barcode, p.part_number].some(v => String(v || '').toLowerCase() === q));
+    if (exact) {
+        document.getElementById('mp-category').value = '';
+        document.getElementById('mp-search').value = '';
+        pickMilkProduct(exact.id);
+        toast(exact.part_name, 'success');
+        return;
+    }
+    const visible = document.querySelectorAll('#mp-product-list [data-mp-pick]');
+    if (visible.length === 1) { pickMilkProduct(visible[0].dataset.mpPick); return; }
+    if (/^\d{6,}$/.test(q)) toast(tr('milk_barcode_not_found'), 'error');
+}
+
+async function addMilkNewItem() {
+    const before = new Set(milkProducts.map(p => String(p.id)));
+    const typed = (document.getElementById('mp-search')?.value || '').trim();
+    openProductModal(null);
+    const pm = document.getElementById('product-modal');
+    if (!pm) return;
+    pm.style.zIndex = '3250'; // above the milk modal (3200), below confirm dialogs (3300)
+    if (typed) {
+        const isCode = /^\d{6,}$/.test(typed);
+        const field = document.getElementById(isCode ? 'p-barcode' : 'p-name');
+        if (field) field.value = typed;
+    }
+    const obs = new MutationObserver(async () => {
+        if (pm.classList.contains('active')) return;
+        obs.disconnect();
+        pm.style.zIndex = '';
+        try { milkProducts = await api('/api/milk/products'); } catch { return; }
+        fillMilkCategorySelect();
+        document.getElementById('mp-search').value = '';
+        const added = milkProducts.filter(p => !before.has(String(p.id))).sort((a, b) => b.id - a.id)[0];
+        if (added) pickMilkProduct(added.id); else renderMilkProductList();
+    });
+    obs.observe(pm, { attributes: true, attributeFilter: ['class'] });
+}
+
+function setupMilkProcessing() {
+    document.getElementById('btn-refresh-milk')?.addEventListener('click', loadMilkProcessing);
+    document.getElementById('milk-show-finished')?.addEventListener('change', loadMilkProcessing);
+
+    document.getElementById('mp-search')?.addEventListener('input', renderMilkProductList);
+    document.getElementById('mp-search')?.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); milkSearchEnter(); }
+    });
+    document.getElementById('mp-category')?.addEventListener('change', renderMilkProductList);
+    document.getElementById('mp-product-list')?.addEventListener('click', e => {
+        const item = e.target.closest('[data-mp-pick]');
+        if (item) pickMilkProduct(item.dataset.mpPick);
+    });
+    document.getElementById('btn-mp-new-item')?.addEventListener('click', addMilkNewItem);
+
+    document.getElementById('milk-processing')?.addEventListener('click', async e => {
+        const proc = e.target.closest('[data-milk-process]');
+        if (proc) { openMilkProductionModal(proc.dataset.milkProcess); return; }
+        const del = e.target.closest('[data-milk-delete]');
+        if (del) {
+            if (!(await confirmDialog(tr('milk_confirm_delete')))) return;
+            try {
+                await api('/api/milk/productions/' + del.dataset.milkDelete + '/delete', { method: 'POST' });
+                toast(tr('saved_ok'), 'success');
+                await loadMilkProcessing();
+                try { await loadData(); } catch { /* inventory refresh is best-effort */ }
+            } catch (err) { toast(err.message, 'error'); }
+        }
+    });
+
+    document.getElementById('milk-production-form')?.addEventListener('submit', async e => {
+        e.preventDefault();
+        if (!milkSelectedIntake) return;
+        if (!document.getElementById('mp-product').value) { toast(tr('milk_pick_product'), 'error'); return; }
+        try {
+            await api('/api/milk/productions', { method: 'POST', body: JSON.stringify({
+                expenseId: Number(milkSelectedIntake.expense_id),
+                partId: Number(document.getElementById('mp-product').value),
+                litersUsed: Number(document.getElementById('mp-liters').value),
+                quantityMade: Number(document.getElementById('mp-made').value),
+                notes: document.getElementById('mp-notes').value || null,
+                recordedBy: currentUser?.username || null
+            }) });
+            closeModal('milk-production-modal');
+            toast(tr('saved_ok'), 'success');
+            await loadMilkProcessing();
+            try { await loadData(); } catch { /* inventory refresh is best-effort */ }
+        } catch (err) { toast(err.message, 'error'); }
+    });
+}
+
+/* ---------- App display size (Settings > General) ---------- */
+const APP_ZOOM_KEY = 'altayebat_app_zoom';
+const APP_ZOOM_STEPS = [0.75, 0.8, 0.9, 1, 1.1, 1.25, 1.5, 1.75];
+
+function getAppZoom() {
+    let z = 1;
+    try { z = Number(localStorage.getItem(APP_ZOOM_KEY)) || 1; } catch { /* storage blocked */ }
+    return APP_ZOOM_STEPS.includes(z) ? z : 1;
+}
+
+// In the desktop app the window itself zooms (keeps layout correct); in a plain browser use CSS zoom.
+function applyAppZoom(z) {
+    if (window.chrome?.webview?.postMessage) {
+        document.documentElement.style.zoom = '';
+        window.chrome.webview.postMessage(JSON.stringify({ action: 'setZoom', value: z }));
+    } else {
+        document.documentElement.style.zoom = z === 1 ? '' : String(z);
+    }
+    const sel = document.getElementById('settings-zoom');
+    if (sel) sel.value = String(z);
+    const i = APP_ZOOM_STEPS.indexOf(z);
+    const out = document.getElementById('btn-zoom-out'), inn = document.getElementById('btn-zoom-in');
+    if (out) out.disabled = i <= 0;
+    if (inn) inn.disabled = i >= APP_ZOOM_STEPS.length - 1;
+}
+
+function setAppZoom(z) {
+    try { localStorage.setItem(APP_ZOOM_KEY, String(z)); } catch { /* storage blocked */ }
+    applyAppZoom(z);
+}
+
+function setupAppZoom() {
+    applyAppZoom(getAppZoom());
+    const step = (dir) => {
+        const i = APP_ZOOM_STEPS.indexOf(getAppZoom());
+        const next = APP_ZOOM_STEPS[Math.min(APP_ZOOM_STEPS.length - 1, Math.max(0, i + dir))];
+        setAppZoom(next);
+    };
+    document.getElementById('settings-zoom')?.addEventListener('change', e => setAppZoom(Number(e.target.value) || 1));
+    document.getElementById('btn-zoom-out')?.addEventListener('click', () => step(-1));
+    document.getElementById('btn-zoom-in')?.addEventListener('click', () => step(1));
+    document.getElementById('btn-zoom-reset')?.addEventListener('click', () => setAppZoom(1));
+}
+
+/* ---------- Sidebar order (Settings, Softio Super Admin only; applies to all users) ---------- */
+let navDefaultOrder = null; // order as shipped in index.html
+let navOrderDraft = [];     // order being edited in Settings
+
+function navItems() {
+    return [...document.querySelectorAll('#nav-menu > .nav-item[data-target]')];
+}
+
+// Reorder the sidebar; targets not in the list keep their default place at the end
+function applyNavOrder(order) {
+    const menu = document.getElementById('nav-menu');
+    if (!menu || !navDefaultOrder) return;
+    const byTarget = new Map(navItems().map(el => [el.dataset.target, el]));
+    const seq = [...(order || []).filter(t => byTarget.has(t)), ...navDefaultOrder.filter(t => !(order || []).includes(t))];
+    const anchor = navItems()[0]?.previousElementSibling || null;
+    let ref = anchor;
+    for (const t of seq) {
+        const el = byTarget.get(t);
+        if (ref) ref.after(el); else menu.prepend(el);
+        ref = el;
+    }
+}
+
+function renderNavOrderEditor() {
+    const list = document.getElementById('nav-order-list');
+    if (!list) return;
+    const byTarget = new Map(navItems().map(el => [el.dataset.target, el]));
+    list.innerHTML = navOrderDraft.map((t, i) => {
+        const el = byTarget.get(t);
+        const icon = el?.querySelector('.nav-icon')?.textContent || 'circle';
+        const label = el?.querySelector('.label')?.textContent || t;
+        return `<div class="nav-order-item">
+            <span class="material-symbols-rounded">${escapeHtml(icon)}</span>
+            <span class="nav-order-label">${escapeHtml(label)}</span>
+            <button type="button" class="btn-icon" data-nav-move="${i}" data-dir="-1" title="${escapeHtml(tr('nav_order_up'))}" ${i === 0 ? 'disabled' : ''}><span class="material-symbols-rounded">arrow_upward</span></button>
+            <button type="button" class="btn-icon" data-nav-move="${i}" data-dir="1" title="${escapeHtml(tr('nav_order_down'))}" ${i === navOrderDraft.length - 1 ? 'disabled' : ''}><span class="material-symbols-rounded">arrow_downward</span></button>
+        </div>`;
+    }).join('');
+}
+
+async function saveNavOrder(order) {
+    try {
+        await api('/api/settings/nav-order', { method: 'PUT', body: JSON.stringify({ username: currentUser?.username || '', order }) });
+        applyNavOrder(order.length ? order : navDefaultOrder);
+        toast(tr('saved_ok'), 'success');
+    } catch (err) { toast(err.message, 'error'); }
+}
+
+async function setupNavOrder() {
+    navDefaultOrder = navItems().map(el => el.dataset.target);
+    try { applyNavOrder(await api('/api/settings/nav-order')); } catch { /* keep default order */ }
+    navOrderDraft = navItems().map(el => el.dataset.target);
+    renderNavOrderEditor();
+    document.getElementById('nav-order-list')?.addEventListener('click', e => {
+        const b = e.target.closest('[data-nav-move]');
+        if (!b) return;
+        const i = Number(b.dataset.navMove), j = i + Number(b.dataset.dir);
+        if (j < 0 || j >= navOrderDraft.length) return;
+        [navOrderDraft[i], navOrderDraft[j]] = [navOrderDraft[j], navOrderDraft[i]];
+        renderNavOrderEditor();
+    });
+    document.getElementById('btn-nav-order-save')?.addEventListener('click', () => saveNavOrder(navOrderDraft));
+    document.getElementById('btn-nav-order-reset')?.addEventListener('click', async () => {
+        navOrderDraft = [...navDefaultOrder];
+        renderNavOrderEditor();
+        await saveNavOrder([]);
+    });
+    watchNavOrderLanguage();
+}
+
+// Labels in the editor follow the language switch
+function watchNavOrderLanguage() {
+    document.getElementById('btn-lang')?.addEventListener('click', () => setTimeout(renderNavOrderEditor, 50));
+    document.getElementById('btn-settings-lang')?.addEventListener('click', () => setTimeout(renderNavOrderEditor, 50));
+}

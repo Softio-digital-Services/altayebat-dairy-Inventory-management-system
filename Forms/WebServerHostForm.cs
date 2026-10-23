@@ -24,6 +24,7 @@ namespace InventorySystem
         private static readonly Color BrandColor = ThemeConfig.PrimaryColor;
 
         private readonly WebView2 _webView;
+        private double _zoom = 1.0; // display size requested by the page (Settings)
         private readonly Panel _splash;
         private readonly Panel _spinner;
         private readonly System.Windows.Forms.Timer _spinnerTimer;
@@ -63,7 +64,7 @@ namespace InventorySystem
 
             // Start WebView2 environment immediately (parallel with server boot)
             var userData = System.IO.Path.Combine(DatabaseConfig.UserDataDirectory, "WebView2");
-            try { _envTask = CoreWebView2Environment.CreateAsync(null, userData); }
+            try { _envTask = CoreWebView2Environment.CreateAsync(null, userData, CreateBrowserOptions()); }
             catch { _envTask = null; }
 
             _splash = new Panel { Dock = DockStyle.Fill, BackColor = BrandColor };
@@ -93,7 +94,7 @@ namespace InventorySystem
                     {
                         Size = new Size(168, 168),
                         SizeMode = PictureBoxSizeMode.Zoom,
-                        BackColor = Color.White,
+                        BackColor = BrandColor, // same as the splash: logo only, no white tile
                         Image = Image.FromFile(logoPath)
                     };
                     _logoControl = pb;
@@ -125,14 +126,17 @@ namespace InventorySystem
             _splash.Resize += (s, e) => LayoutSplash();
             LayoutSplash();
 
+            // The browser stays Visible underneath the splash: a hidden WebView2 is treated like a
+            // background tab (low-priority loading, paused animation frames), which made startup crawl.
             _webView = new WebView2
             {
                 Dock = DockStyle.Fill,
-                Visible = false,
+                Visible = true,
                 DefaultBackgroundColor = BrandColor
             };
             Controls.Add(_webView);
             Controls.Add(_splash);
+            _splash.BringToFront();
             Resize += (s, e) =>
             {
                 if (_printUiInset) ApplyPrintUiInset();
@@ -153,9 +157,7 @@ namespace InventorySystem
             int top = Math.Max(0, (_splash.Height - totalH) / 2);
             _logoControl.Left = (_splash.Width - _logoControl.Width) / 2;
             _logoControl.Top = top;
-            if (_logoControl is PictureBox)
-                ApplyRoundedCorners(_logoControl, 28);
-            else
+            if (!(_logoControl is PictureBox))
                 ApplyRoundedCorners(_logoControl, 24);
             _spinner.Left = (_splash.Width - _spinner.Width) / 2;
             _spinner.Top = _logoControl.Bottom + gap;
@@ -283,21 +285,28 @@ namespace InventorySystem
                 if (_envTask != null)
                 {
                     try { env = await _envTask; } catch { env = null; }
+                    InventorySystem.Helpers.StartupTrace.Mark("ui: webview environment ready");
                 }
                 if (env == null)
                 {
                     var userData = System.IO.Path.Combine(DatabaseConfig.UserDataDirectory, "WebView2");
-                    env = await CoreWebView2Environment.CreateAsync(null, userData);
+                    env = await CoreWebView2Environment.CreateAsync(null, userData, CreateBrowserOptions());
                 }
 
-                if (!await readyTask)
+                // Create the browser while the local server is still starting (both take a few seconds)
+                var createTask = _webView.EnsureCoreWebView2Async(env);
+
+                bool serverOk = await readyTask;
+                InventorySystem.Helpers.StartupTrace.Mark("ui: server answered = " + serverOk);
+                if (!serverOk)
                 {
                     ShowFatal(ThemeConfig.CompanyName + " could not start the local service.\nPlease restart the application.");
                     return;
                 }
 
-                await _webView.EnsureCoreWebView2Async(env);
-                try { _webView.ZoomFactor = 1.0; } catch { }
+                await createTask;
+                InventorySystem.Helpers.StartupTrace.Mark("ui: webview created");
+                try { _webView.ZoomFactor = _zoom; } catch { }
                 _webView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
                 _webView.CoreWebView2.Settings.IsStatusBarEnabled = false;
                 _webView.CoreWebView2.Settings.AreDevToolsEnabled = false;
@@ -307,15 +316,26 @@ namespace InventorySystem
 
                 _webView.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
 
+                // Don't wait for every image/font: once the page structure is ready, reveal shortly after
+                // (the page normally reports "uiReady" first; this is only the safety net).
+                _webView.CoreWebView2.DOMContentLoaded += (s, e) =>
+                {
+                    InventorySystem.Helpers.StartupTrace.Mark("ui: page structure ready");
+                    var t = new System.Windows.Forms.Timer { Interval = 1500 };
+                    t.Tick += (s2, e2) => { t.Stop(); t.Dispose(); RevealUi(); };
+                    t.Start();
+                };
+
                 var tcs = new TaskCompletionSource<bool>();
                 void OnNav(object s, CoreWebView2NavigationCompletedEventArgs e)
                 {
-                    try { _webView.ZoomFactor = 1.0; } catch { }
+                    try { _webView.ZoomFactor = _zoom; } catch { }
                     tcs.TrySetResult(e.IsSuccess);
                 }
                 _webView.CoreWebView2.NavigationCompleted += OnNav;
                 _webView.CoreWebView2.Navigate(PortalUrl);
                 bool ok = await tcs.Task;
+                InventorySystem.Helpers.StartupTrace.Mark("ui: page loaded = " + ok);
                 _webView.CoreWebView2.NavigationCompleted -= OnNav;
 
                 if (!ok)
@@ -351,10 +371,21 @@ namespace InventorySystem
             }
         }
 
+        // Browser flags: keep full speed even if the window is behind other windows while loading
+        private static CoreWebView2EnvironmentOptions CreateBrowserOptions()
+        {
+            return new CoreWebView2EnvironmentOptions(
+                "--disable-features=CalculateNativeWinOcclusion " +
+                "--disable-backgrounding-occluded-windows " +
+                "--disable-renderer-backgrounding " +
+                "--disable-background-timer-throttling");
+        }
+
         private void RevealUi()
         {
             if (_uiRevealed || IsDisposed) return;
             _uiRevealed = true;
+            InventorySystem.Helpers.StartupTrace.Mark("ui: revealed");
             try
             {
                 _revealFallbackTimer?.Stop();
@@ -382,12 +413,22 @@ namespace InventorySystem
                 // Capture values before JsonDocument is disposed (BeginInvoke is async)
                 string action;
                 string openUrl = null;
+                double zoom = 1.0;
                 using (var doc = JsonDocument.Parse(json))
                 {
                     action = doc.RootElement.TryGetProperty("action", out var a) ? a.GetString() : null;
                     if (string.IsNullOrEmpty(action)) return;
                     if (action == "openUrl" && doc.RootElement.TryGetProperty("url", out var u))
                         openUrl = u.GetString();
+                    if (action == "setZoom" && doc.RootElement.TryGetProperty("value", out var z) && z.ValueKind == JsonValueKind.Number)
+                        zoom = Math.Max(0.5, Math.Min(2.0, z.GetDouble()));
+                }
+
+                // App display size chosen in Settings (zoom control is otherwise disabled)
+                if (action == "setZoom")
+                {
+                    BeginInvoke(new Action(() => { _zoom = zoom; try { _webView.ZoomFactor = zoom; } catch { } }));
+                    return;
                 }
 
                 // Drag must run synchronously while the left mouse button is still down.

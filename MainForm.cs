@@ -167,6 +167,7 @@ namespace InventorySystem
             UpdateNavText("btnQuotations", "Nav_Quotations");
             UpdateNavText("btnCurrencies", "Nav_Currencies");
             UpdateNavText("btnExpenses", "Nav_Expenses");
+            UpdateNavText("btnMilkProduction", "Nav_MilkProduction");
             UpdateNavText("btnUsers", "Nav_Users");
             UpdateNavText("btnLabels", "Nav_Barcode");
 
@@ -289,7 +290,7 @@ namespace InventorySystem
             bool dashActive = Dashboard_btn?.Tag != null && Dashboard_btn.Tag is bool d && d;
             ThemeConfig.ApplySidebarButtonIcon(Dashboard_btn, Dashboard_btn?.Image, dashActive);
 
-            string[] navIds = { "btnInventory", "btnCustomers", "btnSuppliers", "btnPOS", "btnReports", "btnHistory", "btnQuotations", "btnCurrencies", "btnExpenses", "btnUsers", "btnLabels" };
+            string[] navIds = { "btnInventory", "btnCustomers", "btnSuppliers", "btnPOS", "btnReports", "btnHistory", "btnQuotations", "btnCurrencies", "btnExpenses", "btnMilkProduction", "btnUsers", "btnLabels" };
             foreach (string id in navIds)
             {
                 var found = Controls.Find(id, true);
@@ -700,6 +701,7 @@ namespace InventorySystem
             _dashboardService = new Services.DashboardService();
             var expenseService = new Services.ExpenseService();
             expenseService.ProcessRecurringExpenses(); // Check for month-end expenses
+            new Services.MilkProductionService().SyncRawMilkStock(); // Create/refresh the Raw Milk inventory item
 
             _notificationTimer = new System.Windows.Forms.Timer { Interval = 30000 };
             _notificationTimer.Tick += (s, e) => RefreshNotificationBadge(); _notificationTimer.Start(); RefreshNotificationBadge();
@@ -845,6 +847,7 @@ namespace InventorySystem
             SetNavVisibility("btnHistory", isAdmin || isStaff || isAccountant);
             SetNavVisibility("btnQuotations", isAdmin || isStaff || isAccountant);
             SetNavVisibility("btnExpenses", isAdmin || isStaff || isAccountant);
+            SetNavVisibility("btnMilkProduction", isAdmin || isStaff || isAccountant);
 
             if (isAccountant)
             {

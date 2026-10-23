@@ -22,7 +22,8 @@ namespace InventorySystem.Helpers
         private static void UpdateSchema()
         {
             // Ensure category_image column exists for existing databases
-            DatabaseHelper.ExecuteNonQuery("ALTER TABLE categories ADD COLUMN category_image TEXT;");
+            if (DatabaseHelper.ExecuteScalar<int>("SELECT COUNT(*) FROM pragma_table_info('categories') WHERE name = 'category_image'") == 0)
+                DatabaseHelper.ExecuteNonQuery("ALTER TABLE categories ADD COLUMN category_image TEXT;");
 
             // Ensure Softio Super Admin always exists
             EnsureSoftioSuperAdmin();

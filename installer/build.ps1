@@ -26,6 +26,21 @@ foreach ($c in $dotnetCandidates) {
 if (-not $dotnet) { throw "No .NET SDK found. Install the .NET 8 SDK from https://dotnet.microsoft.com/download/dotnet/8.0" }
 Write-Host "Using .NET SDK: $dotnet" -ForegroundColor DarkGray
 
+# A running copy from dist\ locks its files and makes publish/copy fail -- close it first.
+$running = Get-Process -ErrorAction SilentlyContinue | Where-Object {
+    $_.Path -and $_.Path.StartsWith($distDir, [System.StringComparison]::OrdinalIgnoreCase)
+}
+if ($running) {
+    Write-Host "==> Closing running app from dist\ so it can be replaced..." -ForegroundColor Yellow
+    foreach ($p in $running) {
+        Write-Host "    $($p.Path) (PID $($p.Id))" -ForegroundColor DarkGray
+        $null = $p.CloseMainWindow()
+    }
+    $running | ForEach-Object { $_.WaitForExit(10000) | Out-Null }
+    $running | Where-Object { -not $_.HasExited } | Stop-Process -Force -ErrorAction SilentlyContinue
+    Start-Sleep -Seconds 1
+}
+
 Write-Host "==> Publishing self-contained Release (win-x64)..." -ForegroundColor Cyan
 if (Test-Path $publishDir) { Remove-Item $publishDir -Recurse -Force }
 New-Item -ItemType Directory -Force -Path $publishDir | Out-Null
@@ -55,6 +70,23 @@ if (-not (Test-Path $publishedExe)) { throw "Single-file exe not found: $publish
 Copy-Item $publishedExe $portableExe -Force
 Remove-Item $singleDir -Recurse -Force
 Write-Host "Portable app: $portableExe" -ForegroundColor Green
+
+# Offline WebView2 runtime installer, bundled into setup so it installs on laptops without internet.
+# Downloaded once from Microsoft and kept in installer\redist (ignored by git: ~180 MB).
+$wv2 = Join-Path $PSScriptRoot "redist\MicrosoftEdgeWebView2RuntimeInstallerX64.exe"
+if (-not (Test-Path $wv2)) {
+    Write-Host "==> Downloading offline WebView2 runtime installer (one time)..." -ForegroundColor Cyan
+    New-Item -ItemType Directory -Force -Path (Split-Path $wv2) | Out-Null
+    & curl.exe -sSL --fail -o "$wv2.part" "https://go.microsoft.com/fwlink/?linkid=2124701"
+    $sig = if (Test-Path "$wv2.part") { Get-AuthenticodeSignature "$wv2.part" } else { $null }
+    if ($LASTEXITCODE -eq 0 -and $sig -and $sig.Status -eq 'Valid' -and $sig.SignerCertificate.Subject -like '*Microsoft*') {
+        Move-Item "$wv2.part" $wv2 -Force
+    } else {
+        Remove-Item "$wv2.part" -ErrorAction SilentlyContinue
+        Write-Host "WARNING: could not get the offline WebView2 installer. Setup will download WebView2 online instead (only on PCs that lack it)." -ForegroundColor Yellow
+    }
+}
+if (Test-Path $wv2) { Write-Host "Offline WebView2 runtime will be bundled into setup." -ForegroundColor DarkGray }
 
 Write-Host "==> Looking for Inno Setup 6.4+ (ISCC)..." -ForegroundColor Cyan
 $pf86 = ${env:ProgramFiles(x86)}

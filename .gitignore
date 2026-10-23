@@ -45,3 +45,6 @@ _backup_pre_otargi_web/
 
 # Keep inventory database tracked
 !Data/inventory.db
+
+# Offline WebView2 runtime installer (downloaded by installer/build.ps1, ~180 MB)
+installer/redist/

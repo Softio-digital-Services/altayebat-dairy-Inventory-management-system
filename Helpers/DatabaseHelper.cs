@@ -443,6 +443,20 @@ namespace InventorySystem
                 if (!ColumnExists("expenses", "milk_type")) ExecuteNonQuery("ALTER TABLE expenses ADD COLUMN milk_type TEXT;");
                 if (!ColumnExists("expenses", "shift")) ExecuteNonQuery("ALTER TABLE expenses ADD COLUMN shift TEXT;");
 
+                // What each milk intake was turned into (cheese, labneh, laban...)
+                ExecuteNonQuery(@"
+                    CREATE TABLE IF NOT EXISTS milk_production (
+                        production_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+                        expense_id      INTEGER NOT NULL,
+                        part_id         INTEGER NOT NULL,
+                        liters_used     REAL NOT NULL,
+                        quantity_made   REAL NOT NULL,
+                        notes           TEXT,
+                        production_date TEXT DEFAULT (datetime('now', 'localtime')),
+                        recorded_by     TEXT,
+                        date_deleted    TEXT
+                    );");
+
                 // Seed default dairy categories if empty
                 int catCount = ExecuteScalar<int>("SELECT COUNT(*) FROM expense_categories");
                 if (catCount == 0)

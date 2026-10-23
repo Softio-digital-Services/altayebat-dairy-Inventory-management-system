@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -47,7 +47,7 @@
     <Content Include="Plugins\**" CopyToOutputDirectory="PreserveNewest" Exclude="Plugins\**\*.cs" />
     <Content Include="Templates\**" CopyToOutputDirectory="PreserveNewest" Condition="Exists('Templates')" />
     <Content Include="Database\pos_cert.pfx" CopyToOutputDirectory="PreserveNewest" Condition="Exists('Database\pos_cert.pfx')" />
-    <Content Include="Data\inventory.db" CopyToOutputDirectory="PreserveNewest" Condition="Exists('Data\inventory.db')" />
+    <!-- Data\inventory.db is demo data for development only: not shipped, new installs start empty -->
   </ItemGroup>
 
   <ItemGroup>
